@@ -1,0 +1,55 @@
+<Experiment version="2.0">
+    <SpatialQuery type="kd-tree" test_visibility="false" />
+    <Common time_step="0.1" />
+
+    <ObstacleSet class="1" file_name="test_navmesh.nav" type="nav_mesh" />
+
+    <AgentProfile name="static_obstacle">
+      <Common class="1" max_accel="0" max_angle_vel="0" max_neighbors="10" max_speed="0" neighbor_dist="5" obstacleSet="1" pref_speed="0" r="0.2" />
+      <PedVO buffer="0.9" factor="1.57" tau="3" tauObst="0.1" turningBias="1.0" />
+      <ORCA tau="1.0" tauObst="0.4" />
+    </AgentProfile>
+
+    <AgentGroup>
+      <ProfileSelector name="static_obstacle" type="const" />
+      <StateSelector name="static" type="const" />
+      <Generator type="explicit">
+        <Agent p_x="15.0" p_y="-7.5"/>
+        <Agent p_x="15.0" p_y="-7.5"/>
+        <Agent p_x="15.0" p_y="-7.5"/>
+      </Generator>
+    </AgentGroup>
+
+    <AgentProfile name="human">
+      <Common class="1" max_accel="5" max_angle_vel="360" max_neighbors="10" max_speed="3" neighbor_dist="5" obstacleSet="1" pref_speed="1.5" r="0.25" />
+      <PedVO buffer="0.9" factor="1.57" tau="3" tauObst="0.1" turningBias="1.0" />
+      <ORCA tau="1.0" tauObst="0.4" />
+    </AgentProfile>
+
+    <AgentGroup>
+      <ProfileSelector name="human" type="const" />
+      <StateSelector name="walk" type="const" />
+      <Generator type="explicit">
+          <Agent p_x="18.703371473730833" p_y="-4.2749893911585725" />
+          <Agent p_x="18.800509215163473" p_y="-9.021843032694699" />
+          <Agent p_x="18.800509215163473" p_y="-10.8" />
+      </Generator>
+    </AgentGroup>
+
+    <AgentProfile name="injuredwalking">
+        <Common class="1" max_accel="5" max_angle_vel="360" max_neighbors="10" max_speed="2" neighbor_dist="5" obstacleSet="1" pref_speed="1.04" r="0.25" />
+        <PedVO buffer="0.9" factor="1.57" tau="3" tauObst="0.1" turningBias="1.0" />
+        <ORCA tau="3.0" tauObst="0.15" />
+    </AgentProfile>
+  
+    <AgentGroup>
+      <ProfileSelector name="injuredwalking" type="const" />
+      <StateSelector name="injuredwalking" type="const" />
+      <Generator type="explicit">
+          <Agent p_x="18.62631349348759" p_y="-6.92421179667802" />
+          <Agent p_x="10.64" p_y="-3.85" />
+      </Generator>
+    </AgentGroup>
+
+
+</Experiment>

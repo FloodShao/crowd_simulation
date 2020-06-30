@@ -1,0 +1,8 @@
+name: dp1
+agent_count: 8
+robot_count: 1
+scale: 0.05
+level: '../../../../maps/cgh/maps/dp1/L1.svg'
+behavior_out: 'dp1_behavior.xml'
+scene_out: 'dp1_scene.xml'
+navmesh_out: 'dp1_navmesh.nav'
