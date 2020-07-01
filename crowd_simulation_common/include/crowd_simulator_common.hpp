@@ -194,15 +194,6 @@ public:
   size_t GetNumObjects();
   ObjectPtr GetObjectById(size_t id);
 
-  // old interface with ignition::math::Pose3d
-  // void UpdateExternalAgent(size_t id, const ignition::math::Pose3d& modelPose);
-  // void UpdateExternalAgent(const AgentPtr agentPtr,
-  //   const ignition::math::Pose3d& modelPose);
-  // void GetAgentPose(size_t id, double deltaSimTime,
-  //   ignition::math::Pose3d& modelPose);
-  // void GetAgentPose(const AgentPtr agentPtr, double deltaSimTime,
-  //   ignition::math::Pose3d& modelPose);
-
   void OneStepSim();
 
   void UpdateExternalAgent(size_t id, const AgentPose3d& modelPose);

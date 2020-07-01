@@ -159,65 +159,6 @@ CrowdSimInterface::ObjectPtr CrowdSimInterface::GetObjectById(size_t id)
   return this->_objects[id];
 }
 
-/*
-void CrowdSimInterface::UpdateExternalAgent(size_t id,
-  const ignition::math::Pose3d& modelPose)
-{
-  assert(id < this->GetNumObjects());
-
-  auto agentPtr = this->_objects[id]->agentPtr;
-  this->UpdateExternalAgent(agentPtr, modelPose);
-}
-
-void CrowdSimInterface::UpdateExternalAgent(const AgentPtr agentPtr,
-  const ignition::math::Pose3d& modelPose)
-{
-  assert(agentPtr);
-  agentPtr->_pos.setX(modelPose.Pos().X());
-  agentPtr->_pos.setY(modelPose.Pos().Y());
-}
-
-
-void CrowdSimInterface::GetAgentPose(size_t id, double deltaSimTime,
-  ignition::math::Pose3d& modelPose)
-{
-
-  assert(id < this->GetNumObjects());
-
-  auto agentPtr = this->_objects[id]->agentPtr;
-
-  this->GetAgentPose(agentPtr, deltaSimTime, modelPose);
-}
-
-void CrowdSimInterface::GetAgentPose(const AgentPtr agentPtr,
-  double deltaSimTime,
-  ignition::math::Pose3d& modelPose)
-{
-  //calculate future position in deltaSimTime.
-  assert(agentPtr);
-  double Px = static_cast<double>(agentPtr->_pos.x()) +
-    static_cast<double>(agentPtr->_vel.x()) * deltaSimTime;
-  double Py = static_cast<double>(agentPtr->_pos.y()) +
-    static_cast<double>(agentPtr->_vel.y()) * deltaSimTime;
-
-  // deltaDist = static_cast<double>(agentPtr->_vel.Length()) * deltaTime; //approximate distance travelled since last update
-
-  modelPose.Pos().X(Px);
-  modelPose.Pos().Y(Py);
-
-  double xRot = static_cast<double>(agentPtr->_orient.x());
-  double yRot = static_cast<double>(agentPtr->_orient.y());
-  ignition::math::Quaterniond Ori({
-      xRot, -yRot, 0,
-      yRot, xRot, 0,
-      0, 0, 1,
-    });
-
-  //TODO check whether correct, might be different from Kong Peng
-  modelPose.Rot() = Ori;
-}
-*/
-
 
 void CrowdSimInterface::OneStepSim()
 {
