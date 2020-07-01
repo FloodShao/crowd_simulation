@@ -1,5 +1,5 @@
 #include <fstream>
-
+#include <ignition/math.hh>
 #include "crowd_simulator_common.hpp"
 
 namespace crowd_simulator {
@@ -159,7 +159,7 @@ CrowdSimInterface::ObjectPtr CrowdSimInterface::GetObjectById(size_t id)
   return this->_objects[id];
 }
 
-
+/*
 void CrowdSimInterface::UpdateExternalAgent(size_t id,
   const ignition::math::Pose3d& modelPose)
 {
@@ -216,10 +216,164 @@ void CrowdSimInterface::GetAgentPose(const AgentPtr agentPtr,
   //TODO check whether correct, might be different from Kong Peng
   modelPose.Rot() = Ori;
 }
+*/
+
 
 void CrowdSimInterface::OneStepSim()
 {
   this->_mengeHandle->SimStep();
+}
+
+
+void CrowdSimInterface::UpdateExternalAgent(size_t id, const AgentPose3d& modelPose){
+
+  assert(id < this->GetNumObjects());
+
+  auto agentPtr = this->_objects[id]->agentPtr;
+  this->UpdateExternalAgent(agentPtr, modelPose);
+}
+
+
+void CrowdSimInterface::UpdateExternalAgent(const AgentPtr agentPtr, const AgentPose3d& modelPose){
+
+  assert(agentPtr);
+
+  agentPtr->_pos.setX(modelPose.X());
+  agentPtr->_pos.setY(modelPose.Y());
+}
+
+
+void CrowdSimInterface::GetAgentPose(size_t id, double deltaSimTime, AgentPose3d& modelPose){
+
+  assert(id < this->GetNumObjects());
+
+  auto agentPtr = this->_objects[id]->agentPtr;
+  this->GetAgentPose(agentPtr, deltaSimTime, modelPose);
+}
+
+
+void CrowdSimInterface::GetAgentPose(const AgentPtr agentPtr, double deltaSimTime, AgentPose3d& modelPose){
+  //calculate future position in deltaSimTime.
+  assert(agentPtr);
+  double Px = static_cast<double>(agentPtr->_pos.x()) +
+    static_cast<double>(agentPtr->_vel.x()) * deltaSimTime;
+  double Py = static_cast<double>(agentPtr->_pos.y()) +
+    static_cast<double>(agentPtr->_vel.y()) * deltaSimTime;
+
+  modelPose.X(Px);
+  modelPose.Y(Py);
+  modelPose.Z() = 0.0;
+
+  double xRot = static_cast<double>(agentPtr->_orient.x());
+  double yRot = static_cast<double>(agentPtr->_orient.y());
+
+  // not interface related, just to calculate the picth, roll, and yaw...
+  // actually there is only yaw. pitch = 0, roll = 0
+  // yaw is atan2(xRot/yRot)
+  ignition::math::Quaterniond Ori({
+      xRot, -yRot, 0,
+      yRot, xRot, 0,
+      0, 0, 1,
+    });
+  
+  modelPose.Pitch(Ori.Euler().X());
+  modelPose.Roll(Ori.Euler().Y());
+  modelPose.Yaw(Ori.Euler().Z());
+
+}
+
+//=============================================================
+AgentPose3d::AgentPose3d(){
+  this->_x = 0.0;
+  this->_y = 0.0;
+  this->_z = 0.0;
+  this->_pitch = 0.0;
+  this->_roll = 0.0;
+  this->_yaw = 0.0;
+}
+
+AgentPose3d::~AgentPose3d(){
+  //do nothing
+}
+
+AgentPose3d::AgentPose3d(double& x, double& y, double& z, double& pitch, double& roll, double& yaw){
+  this->_x = x;
+  this->_y = y;
+  this->_z = z;
+  this->_pitch = pitch;
+  this->_roll = roll;
+  this->_yaw = yaw;
+}
+
+double AgentPose3d::X() const {
+  return this->_x;
+}
+
+double AgentPose3d::Y() const {
+  return this->_y;
+}
+
+double AgentPose3d::Z() const {
+  return this->_z;
+}
+
+double AgentPose3d::Pitch() const {
+  return this->_pitch;
+}
+
+double AgentPose3d::Roll() const {
+  return this->_roll;
+}
+
+double AgentPose3d::Yaw() const {
+  return this->_yaw;
+}
+
+double& AgentPose3d::X(){
+  return this->_x;
+}
+
+double& AgentPose3d::Y(){
+  return this->_y;
+}
+
+double& AgentPose3d::Z(){
+  return this->_z;
+}
+
+double& AgentPose3d::Pitch(){
+  return this->_pitch;
+}
+
+double& AgentPose3d::Roll(){
+  return this->_roll;
+}
+
+double& AgentPose3d::Yaw(){
+  return this->_yaw;
+}
+
+void AgentPose3d::X(double& x){
+  this->_x = x;
+}
+
+void AgentPose3d::Y(double& y){
+  this->_y = y;
+}
+void AgentPose3d::Z(double& z){
+  this->_z = z;
+}
+
+void AgentPose3d::Pitch(double& pitch){
+  this->_pitch = pitch;
+}
+
+void AgentPose3d::Roll(double& roll){
+  this->_roll = roll;
+}
+
+void AgentPose3d::Yaw(double& yaw){
+  this->_yaw = yaw;
 }
 
 } //namespace crowd_simulator

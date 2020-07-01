@@ -75,6 +75,11 @@ size_t TaskManager<TaskType>::GetTasksCount()
   return this->_tasks.size();
 }
 
+//===============================================================
+crowd_simulator::AgentPose3d Convert(const ignition::math::Pose3d& ignition_pose);
+
+ignition::math::Pose3d Convert(const crowd_simulator::AgentPose3d& agent_pose);
+
 //================================================================
 /*
 * class CrowdSimulatorPlugin
@@ -124,7 +129,7 @@ private:
   bool _LoadParams(const sdf::ElementPtr& sdf);
   bool _LoadCrowdSim();
   bool _LoadModelRotation(const sdf::ElementPtr& modelTypeElement,
-    ignition::math::Pose3d& result) const;
+    crowd_simulator::AgentPose3d& result) const;
   bool _CreateModel(const std::string& modelName,
     const crowd_simulator::ModelTypeDatabase::Record* modelTypePtr,
     const crowd_simulator::AgentPtr agentPtr);

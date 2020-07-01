@@ -4,6 +4,8 @@
 
 #include <sdf/Actor.hh>
 
+#include <ignition/math/Pose3.hh>
+
 #include <ignition/gazebo/components/Name.hh>
 #include <ignition/gazebo/components/Model.hh>
 #include <ignition/gazebo/components/Actor.hh>
@@ -204,8 +206,8 @@ bool CrowdSimulatorPlugin::_LoadParams(const std::shared_ptr<const sdf::Element>
     return true;
 }
 
-bool CrowdSimulatorPlugin::_LoadModelRotation(const sdf::ElementPtr& modelTypeElement, ignition::math::Pose3d& result) const {
-    result = ignition::math::Pose3d::Zero;
+bool CrowdSimulatorPlugin::_LoadModelRotation(const sdf::ElementPtr& modelTypeElement, crowd_simulator::AgentPose3d& result) const {
+
     std::string rotateStr;
     if (modelTypeElement->Get<std::string>("rotate", rotateStr, ""))
     {
@@ -217,13 +219,17 @@ bool CrowdSimulatorPlugin::_LoadModelRotation(const sdf::ElementPtr& modelTypeEl
         if (parts.size() != 3)
         {
         ignerr <<
-            "Error loading <rotate> in <model_type>, 3 floats (roll, pitch, yaw) expected.";
+            "Error loading <rotate> in <model_type>, 3 floats (pitch, roll, yaw) expected.";
         return false;
         }
-        double roll = ignition::math::parseFloat(parts[0]);
-        double pitch = ignition::math::parseFloat(parts[1]);
+        double pitch = ignition::math::parseFloat(parts[0]);
+        double roll = ignition::math::parseFloat(parts[1]);
         double yaw = ignition::math::parseFloat(parts[2]);
-        result.Rot().Euler(roll, pitch, yaw);
+        
+        result.Pitch() = pitch;
+        result.Roll() = roll;
+        result.Yaw() = yaw;
+
     }
     return true;
 }
@@ -430,7 +436,7 @@ void CrowdSimulatorPlugin::_UpdateObject(double deltaTime, double deltaSimTime, 
         auto objectPtr = this->_crowdSimInterface->GetObjectById(this->_objectDic[external_name]);
         assert(objectPtr);
 
-        this->_crowdSimInterface->UpdateExternalAgent(objectPtr->agentPtr, poseComp->Data());
+        this->_crowdSimInterface->UpdateExternalAgent(objectPtr->agentPtr, Convert(poseComp->Data()) );
     }
 
     // update the internal agent world pose and the animation
@@ -449,8 +455,9 @@ void CrowdSimulatorPlugin::_UpdateObject(double deltaTime, double deltaSimTime, 
 
         double animation_speed = this->_modelTypeDBPtr->Get(object_ptr->typeName)->animationSpeed;
 
-        ignition::math::Pose3d update_pose;
-        this->_crowdSimInterface->GetAgentPose(agent_ptr, deltaSimTime, update_pose);
+        crowd_simulator::AgentPose3d agent_pose;
+        this->_crowdSimInterface->GetAgentPose(agent_ptr, deltaSimTime, agent_pose);
+        ignition::math::Pose3d update_pose = Convert(agent_pose);
 
         auto trajPoseComp = ecm.Component<ignition::gazebo::components::TrajectoryPose>(entity);
         if(nullptr == trajPoseComp){
@@ -480,6 +487,26 @@ void CrowdSimulatorPlugin::_UpdateObject(double deltaTime, double deltaSimTime, 
             ignition::gazebo::ComponentState::OneTimeChange);
     }
 
+}
+
+
+//===================================================
+
+crowd_simulator::AgentPose3d Convert(const ignition::math::Pose3d& ignition_pose){
+  auto pos = ignition_pose.Pos();
+  auto euler = ignition_pose.Rot().Euler();
+
+  return crowd_simulator::AgentPose3d(pos.X(), pos.Y(), pos.Z(), euler.X(), euler.Y(), euler.Z());
+}
+
+ignition::math::Pose3d Convert(const crowd_simulator::AgentPose3d& agent_pose){
+  return ignition::math::Pose3d(
+    agent_pose.X(), 
+    agent_pose.Y(), 
+    agent_pose.Z(), 
+    agent_pose.Pitch(), 
+    agent_pose.Roll(), 
+    agent_pose.Yaw());
 }
 
 } //namespace crowd_simulation_ign

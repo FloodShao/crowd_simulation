@@ -1,4 +1,4 @@
-source ~/thirdpart_lib/ignition_dome/install/setup.bash
+source ~/lib_ws/install/setup.bash
 source ~/dev_ws/install/setup.bash
 
 export IGN_FILE_PATH=${PWD}/../models:/usr/share/gazebo-9/models

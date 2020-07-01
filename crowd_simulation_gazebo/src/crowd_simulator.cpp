@@ -8,7 +8,6 @@
 
 #include "crowd_simulator.hpp"
 
-
 namespace crowd_simulation_gazebo {
 
 //============================================
@@ -161,11 +160,14 @@ void CrowdSimulatorPlugin::_UpdateObject(double deltaTime, double deltaSimTime,
   {
     //update pose from gazebo to menge
     pose = modelPtr->WorldPose();
-    this->_crowdSimInterface->UpdateExternalAgent(agentPtr, pose);
+    this->_crowdSimInterface->UpdateExternalAgent(agentPtr, Convert(pose));
     return;
   }
+
   //update pose from menge to gazebo
-  this->_crowdSimInterface->GetAgentPose(agentPtr, deltaSimTime, pose);
+  crowd_simulator::AgentPose3d agent_pose;
+  this->_crowdSimInterface->GetAgentPose(agentPtr, deltaSimTime, agent_pose);
+  pose = Convert(agent_pose); 
 
   gazebo::physics::ActorPtr actorPtr =
     boost::dynamic_pointer_cast<gazebo::physics::Actor>(modelPtr);
@@ -177,7 +179,8 @@ void CrowdSimulatorPlugin::_UpdateObject(double deltaTime, double deltaSimTime,
   //add on original loaded pose
   auto animation = actorPtr->SkeletonAnimations().at(typePtr->animation);
   auto animPose = this->_AnimationRootPose(actorPtr, animation);
-  animPose += typePtr->pose;
+  auto originPose = Convert(typePtr->pose);
+  animPose += originPose;
 
   //update x and y coordinates
   animPose.Pos().X(pose.Pos().X());
@@ -391,9 +394,8 @@ bool CrowdSimulatorPlugin::_LoadCrowdSim()
 //============================================
 bool CrowdSimulatorPlugin::_LoadModelRotation(
   const sdf::ElementPtr& modelTypeElement,
-  ignition::math::Pose3d& result) const
+  crowd_simulator::AgentPose3d& result) const
 {
-  result = ignition::math::Pose3d::Zero;
   std::string rotateStr;
   if (modelTypeElement->Get<std::string>("rotate", rotateStr, ""))
   {
@@ -405,13 +407,16 @@ bool CrowdSimulatorPlugin::_LoadModelRotation(
     if (parts.size() != 3)
     {
       gzerr <<
-        "Error loading <rotate> in <model_type>, 3 floats (roll, pitch, yaw) expected.";
+        "Error loading <rotate> in <model_type>, 3 floats (pitch, roll, yaw) expected.";
       return false;
     }
-    double roll = ignition::math::parseFloat(parts[0]);
-    double pitch = ignition::math::parseFloat(parts[1]);
+    double pitch = ignition::math::parseFloat(parts[0]);
+    double roll = ignition::math::parseFloat(parts[1]);
     double yaw = ignition::math::parseFloat(parts[2]);
-    result.Rot().Euler(roll, pitch, yaw);
+
+    result.Pitch() = pitch;
+    result.Roll() = roll;
+    result.Yaw() = yaw;
   }
   return true;
 }
@@ -460,6 +465,25 @@ bool CrowdSimulatorPlugin::_CreateModel(const std::string& modelName,
   gzdbg << "Insert corresponding model for simulator agent: [" << modelName <<
     " ]." << std::endl;
   return true;
+}
+
+//===================================================
+
+crowd_simulator::AgentPose3d Convert(const ignition::math::Pose3d& ignition_pose){
+  auto pos = ignition_pose.Pos();
+  auto euler = ignition_pose.Rot().Euler();
+
+  return crowd_simulator::AgentPose3d(pos.X(), pos.Y(), pos.Z(), euler.X(), euler.Y(), euler.Z());
+}
+
+ignition::math::Pose3d Convert(const crowd_simulator::AgentPose3d& agent_pose){
+  return ignition::math::Pose3d(
+    agent_pose.X(), 
+    agent_pose.Y(), 
+    agent_pose.Z(), 
+    agent_pose.Pitch(), 
+    agent_pose.Roll(), 
+    agent_pose.Yaw());
 }
 
 
