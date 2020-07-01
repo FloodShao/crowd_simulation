@@ -1,6 +1,10 @@
-## Tips to use ignition plugin
+# Crowd simualtion plugin for gazebo and ignition-gazebo
 
-1. use the following ignition source branch:
+## Reference:
+**Menge**: <https://github.com/MengeCrowdSim/Menge>. Menge is an open framework for crowd simulation. In this simulation, the original menge lib is modified to satisfy the scenario for rmf project.
+
+## Environment Setup
+1. Please use the following ignition source branch, if you are going to use ignition-gazebo plugin.
 ```
 repositories:
   ign-cmake:
@@ -63,12 +67,39 @@ repositories:
     type: git
     url: https://github.com/osrf/sdformat
     version: sdf9
+```
+2. Manually modify `Actor.cc` file in sdformat9. Please check the PR for `Actor.cc` in <https://github.com/osrf/sdformat/pull/301/files>. This PR had been merged into sdf8 but may not be merged into sdf9 yet. If not, you will need to manually modify all the copy constructor in Actor.cc.
 
+3. Menge dependencies:
+The core lib for meng is at <https://github.com/FloodShao/menge_core.git> to make menge possible be compiled with colcon.
+
+## Steps:
+1. Compile ignition package in work space `ignition_ws` after modified the `Actor.cc` in sdf9
+2. In crowd simulation work space `dev_ws`. Download the repositories file "crowd_simulation_plugin.yaml" in the repo, and proceed:
+```
+vcs import src < ./crowd_simulation_plugin.yaml
+```
+3. Colcon compile packages as following order:
+```
+colcon build --packages-select menge
+colcon build --packages-select crowd_simulation_common
+colcon build --packages-select crowd_simulation_gazebo
+colcon build --packages-select crowd_simulation_ign
 ```
 
-2. for sdf9, check the PR for `Actor.cc` in <https://github.com/osrf/sdformat/pull/301/files>
-
-this PR had been merged into sdf8 but not into sdf9 yet. You need to manually modify all the copy constructor in Actor.cc.
-
-3. menge dependencies:
-in <https://github.com/FloodShao/menge_core.git>
+## Run simulation
+1. source environment
+```
+source ~/ignition_ws/install/setup.bash
+source ~/dev_ws/inatll/setup.bash
+```
+2. for gazebo plugin
+```
+cd ~/dev_ws/src/crowd_simulation_gazebo/test/crowd_simulation/show_and_tell/
+ros2 launch office_launch.launch
+```
+3. for ignition-gazebo plugin
+```
+cd ~/dev_ws/src/crowd_simulation_ign/test/crowd_simulation/test_world/
+ros2 launch test_world.launch.xml
+```

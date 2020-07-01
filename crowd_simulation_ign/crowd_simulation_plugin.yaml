@@ -1,0 +1,10 @@
+repositories:
+    meng_core:
+        type: git
+        url: https://github.com/FloodShao/menge_core.git
+        version: master
+    crowd_simulation:
+        type: git
+        url: https://github.com/FloodShao/crowd_simulation.git
+        version: master
+    
