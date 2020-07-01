@@ -19,14 +19,6 @@ namespace crowd_simulation_ign {
 CrowdSimulatorPlugin::CrowdSimulatorPlugin(){
 
     this->_modelTypeDBPtr = std::make_shared<crowd_simulator::ModelTypeDatabase>();
-
-
-    //TODO: initialize the rclcpp node correctly
-    int argc;
-    char** argv;
-    rclcpp::init(argc, argv);
-
-    this->_nodePtr = rclcpp::Node::make_shared("crowd_simulator_plugin");
     this->_transportNodePtr = std::make_shared<ignition::transport::Node>();
 }
 
