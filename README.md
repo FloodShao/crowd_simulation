@@ -103,3 +103,6 @@ ros2 launch office_launch.launch
 cd ~/dev_ws/src/crowd_simulation_ign/test/crowd_simulation/test_world/
 ros2 launch test_world.launch.xml
 ```
+### Note
+The default engine for ignition is "orge".
+If you have the nvidia graphics, remember to change the `<engine>` tag in `test_world/test.world` to orge2.
