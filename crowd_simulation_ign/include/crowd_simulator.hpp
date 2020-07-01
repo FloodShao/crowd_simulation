@@ -3,7 +3,6 @@
 #include <rclcpp/rclcpp.hpp>
 
 #include <ignition/plugin/Register.hh>
-#include <ignition/math/Pose3.hh>
 #include <ignition/gazebo/System.hh>
 #include <ignition/gazebo/Model.hh>
 
@@ -59,7 +58,7 @@ private:
 
     bool _LoadParams(const std::shared_ptr<const sdf::Element>& sdf);
 
-    bool _LoadModelRotation(const sdf::ElementPtr& modelTypeElement, ignition::math::Pose3d& result) const;
+    bool _LoadModelRotation(const sdf::ElementPtr& modelTypeElement, crowd_simulator::AgentPose3d& result) const;
     
     bool _LoadCrowdSim();
     
@@ -75,5 +74,10 @@ private:
     void _UpdateObject(double deltaTime, double deltaAnimTime, ignition::gazebo::EntityComponentManager& ecm);
 
 };
+
+//================================================================================
+crowd_simulator::AgentPose3d Convert(const ignition::math::Pose3d& ignition_pose);
+
+ignition::math::Pose3d Convert(const crowd_simulator::AgentPose3d& agent_pose);
 
 } //namespace crowd_simulation_ign

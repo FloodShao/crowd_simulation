@@ -5,18 +5,57 @@
 #include <list>
 #include <queue>
 
-#include <ignition/math.hh>
-#include <ignition/math/Pose3.hh>
-
 #include <MengeCore/Runtime/SimulatorDB.h>
 #include <MengeCore/Orca/ORCADBEntry.h>
 #include <MengeCore/Orca/ORCASimulator.h>
 #include <MengeCore/PluginEngine/CorePluginEngine.h>
 
-
 namespace crowd_simulator {
 
-using AgentPtr = std::shared_ptr<Menge::Agents::BaseAgent>;
+using AgentPtr = std::shared_ptr<Menge::Agents::BaseAgent>; //using crowd_simulator::AgentPtr
+//===============================================================
+/*
+* class AgentPose3d
+* replace the common interface of ignition::math::Pose3d, which might apply with different version in different plugins
+*/
+class  AgentPose3d{
+
+public:
+  AgentPose3d();
+  AgentPose3d(double& x, double& y, double& z, double& pitch, double& roll, double& yaw);
+
+  ~AgentPose3d();
+
+  double X() const;
+  double Y() const;
+  double Z() const;
+  double Pitch() const;
+  double Roll() const;
+  double Yaw() const;
+
+  double& X();
+  double& Y();
+  double& Z();
+  double& Pitch();
+  double& Roll();
+  double& Yaw();
+
+  void X(double& x);
+  void Y(double& y);
+  void Z(double& z);
+  void Pitch(double& pitch);
+  void Roll(double& roll);
+  void Yaw(double& yaw);
+
+private:
+  double _x;
+  double _y;
+  double _z;
+  double _pitch;
+  double _roll;
+  double _yaw;
+
+};
 
 //================================================================
 /*
@@ -91,7 +130,8 @@ public:
   {
     std::string typeName;
     std::string fileName;
-    ignition::math::Pose3d pose = ignition::math::Pose3d::Zero;
+    // ignition::math::Pose3d pose = ignition::math::Pose3d::Zero;
+    AgentPose3d pose;
     std::string animation;
     double animationSpeed;
     
@@ -154,14 +194,21 @@ public:
   size_t GetNumObjects();
   ObjectPtr GetObjectById(size_t id);
 
-  void UpdateExternalAgent(size_t id, const ignition::math::Pose3d& modelPose);
-  void UpdateExternalAgent(const AgentPtr agentPtr,
-    const ignition::math::Pose3d& modelPose);
-  void GetAgentPose(size_t id, double deltaSimTime,
-    ignition::math::Pose3d& modelPose);
-  void GetAgentPose(const AgentPtr agentPtr, double deltaSimTime,
-    ignition::math::Pose3d& modelPose);
+  // old interface with ignition::math::Pose3d
+  // void UpdateExternalAgent(size_t id, const ignition::math::Pose3d& modelPose);
+  // void UpdateExternalAgent(const AgentPtr agentPtr,
+  //   const ignition::math::Pose3d& modelPose);
+  // void GetAgentPose(size_t id, double deltaSimTime,
+  //   ignition::math::Pose3d& modelPose);
+  // void GetAgentPose(const AgentPtr agentPtr, double deltaSimTime,
+  //   ignition::math::Pose3d& modelPose);
+
   void OneStepSim();
+
+  void UpdateExternalAgent(size_t id, const AgentPose3d& modelPose);
+  void UpdateExternalAgent(const AgentPtr agentPtr, const AgentPose3d& modelPose);
+  void GetAgentPose(size_t id, double deltaSimTime, AgentPose3d& modelPose);
+  void GetAgentPose(const AgentPtr agentPtr, double deltaSimTime, AgentPose3d& modelPose);
 
 private:
   std::vector<ObjectPtr> _objects; //Database, use id to access ObjectPtr
