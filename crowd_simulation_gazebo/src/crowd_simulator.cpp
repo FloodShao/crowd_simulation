@@ -179,8 +179,7 @@ void CrowdSimulatorPlugin::_UpdateObject(double deltaTime, double deltaSimTime,
   //add on original loaded pose
   auto animation = actorPtr->SkeletonAnimations().at(typePtr->animation);
   auto animPose = this->_AnimationRootPose(actorPtr, animation);
-  auto originPose = Convert(typePtr->pose);
-  animPose += originPose;
+  animPose += Convert(typePtr->pose);
 
   //update x and y coordinates
   animPose.Pos().X(pose.Pos().X());
@@ -414,9 +413,9 @@ bool CrowdSimulatorPlugin::_LoadModelRotation(
     double roll = ignition::math::parseFloat(parts[1]);
     double yaw = ignition::math::parseFloat(parts[2]);
 
-    result.Pitch() = pitch;
-    result.Roll() = roll;
-    result.Yaw() = yaw;
+    result.Pitch(pitch);
+    result.Roll(roll);
+    result.Yaw(yaw);
   }
   return true;
 }
@@ -449,10 +448,7 @@ bool CrowdSimulatorPlugin::_CreateModel(const std::string& modelName,
   sdf::ElementPtr poseElement(new sdf::Element());
   poseElement->SetName("pose");
   std::ostringstream oss;
-  // ignition::math::Poase3d pose(
-  //     static_cast<double>(agentPtr->_pos.X()), static_cast<double>(agentPtr->_pos.Y()), 0,
-  //     0, 0, 0
-  // );
+
   oss << agentPtr->_pos.x() << " " << agentPtr->_pos.y() << " " << "0 0 0 0";
   poseElement->AddValue("pose", oss.str(), true);
   modelElement->InsertElement(poseElement);

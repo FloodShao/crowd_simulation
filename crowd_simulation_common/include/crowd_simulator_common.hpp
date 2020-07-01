@@ -40,12 +40,12 @@ public:
   double& Roll();
   double& Yaw();
 
-  void X(double& x);
-  void Y(double& y);
-  void Z(double& z);
-  void Pitch(double& pitch);
-  void Roll(double& roll);
-  void Yaw(double& yaw);
+  void X(const double& x);
+  void Y(const double& y);
+  void Z(const double& z);
+  void Pitch(const double& pitch);
+  void Roll(const double& roll);
+  void Yaw(const double& yaw);
 
 private:
   double _x;

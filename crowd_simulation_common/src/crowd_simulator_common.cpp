@@ -294,26 +294,26 @@ double& AgentPose3d::Yaw(){
   return this->_yaw;
 }
 
-void AgentPose3d::X(double& x){
+void AgentPose3d::X(const double& x){
   this->_x = x;
 }
 
-void AgentPose3d::Y(double& y){
+void AgentPose3d::Y(const double& y){
   this->_y = y;
 }
-void AgentPose3d::Z(double& z){
+void AgentPose3d::Z(const double& z){
   this->_z = z;
 }
 
-void AgentPose3d::Pitch(double& pitch){
+void AgentPose3d::Pitch(const double& pitch){
   this->_pitch = pitch;
 }
 
-void AgentPose3d::Roll(double& roll){
+void AgentPose3d::Roll(const double& roll){
   this->_roll = roll;
 }
 
-void AgentPose3d::Yaw(double& yaw){
+void AgentPose3d::Yaw(const double& yaw){
   this->_yaw = yaw;
 }
 
