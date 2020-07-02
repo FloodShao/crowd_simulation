@@ -306,15 +306,13 @@ bool CrowdSimulatorPlugin::_LoadParams(const sdf::ElementPtr& sdf)
     if (!modelTypeElement->HasElement("initial_pose"))
     {
       gzerr <<
-        "No model initial pose configured in <model_type>! <initial_pose> Required"
-            << std::endl;
+        "No model initial pose configured in <model_type>! <initial_pose> Required [" << s << "]" << std::endl;
       return false;
     }
     if (!this->_LoadModelInitPose(modelTypeElement, modelTypePtr->pose))
     {
       gzerr <<
-        "Error loading model initial pose in <model_type>! Check <initial_pose>" <<
-        std::endl;
+        "Error loading model initial pose in <model_type>! Check <initial_pose> in [" << s << "]" << std::endl;
       return false;
     }
 

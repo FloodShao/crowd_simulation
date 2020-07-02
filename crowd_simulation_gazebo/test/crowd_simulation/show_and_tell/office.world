@@ -674,7 +674,7 @@
       <model_type>
         <typename>running</typename>
         <filename>run.dae</filename>
-        <initial_pose>0 0 0</initial_pose>
+        <initial_pose>0 0 0 0 0 0</initial_pose>
         <animation>walk</animation>
 	      <animation_speed>10</animation_speed>
       </model_type>
