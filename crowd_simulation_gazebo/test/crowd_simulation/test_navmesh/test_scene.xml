@@ -1,11 +1,18 @@
 <Experiment version="2.0">
+    <!-- <SpatialQuery file_name="simple_navmesh.nav" test_visibility="false" type="nav_mesh" /> -->
     <SpatialQuery type="kd-tree" test_visibility="false" />
     <Common time_step="0.1" />
 
-    <ObstacleSet class="1" file_name="test_navmesh.nav" type="nav_mesh" />
+    <ObstacleSet class="1" file_name="office_navmesh.nav" type="nav_mesh" />
+    <!-- <ObstacleSet type="explicit" class="1">
+        <Obstacle>
+            <Vertex px="18.33" p_y="-3.1"/>
+            <Vertex px="9.98" p_y="-2.95"/>
+        </Obstacle>
+    </ObstacleSet> -->
 
     <AgentProfile name="static_obstacle">
-      <Common class="1" max_accel="0" max_angle_vel="0" max_neighbors="10" max_speed="0" neighbor_dist="5" obstacleSet="1" pref_speed="0" r="0.2" />
+      <Common class="1" max_accel="5" max_angle_vel="360" max_neighbors="10" max_speed="2" neighbor_dist="5" obstacleSet="1" pref_speed="0" r="0.2" />
       <PedVO buffer="0.9" factor="1.57" tau="3" tauObst="0.1" turningBias="1.0" />
       <ORCA tau="1.0" tauObst="0.4" />
     </AgentProfile>
@@ -14,9 +21,9 @@
       <ProfileSelector name="static_obstacle" type="const" />
       <StateSelector name="static" type="const" />
       <Generator type="explicit">
-        <Agent p_x="15.0" p_y="-7.5"/>
-        <Agent p_x="15.0" p_y="-7.5"/>
-        <Agent p_x="15.0" p_y="-7.5"/>
+        <Agent p_x="18.83" p_y="-3.85"/>
+        <Agent p_x="18.83" p_y="-3.85"/>
+        <Agent p_x="18.83" p_y="-3.85"/>
       </Generator>
     </AgentGroup>
 
@@ -30,9 +37,21 @@
       <ProfileSelector name="human" type="const" />
       <StateSelector name="walk" type="const" />
       <Generator type="explicit">
-          <Agent p_x="18.703371473730833" p_y="-4.2749893911585725" />
-          <Agent p_x="18.800509215163473" p_y="-9.021843032694699" />
-          <Agent p_x="18.800509215163473" p_y="-10.8" />
+          <Agent p_x="11.37" p_y="-7.80" />
+          <Agent p_x="18.83" p_y="-3.85" />
+          <Agent p_x="6.7" p_y="-10.8" />
+          <Agent p_x="9.07" p_y="-5.48" />
+          <Agent p_x="15.06" p_y="-6.96" />
+          <Agent p_x="18.79" p_y="-6.92" />
+          <Agent p_x="18.83" p_y="-7.1" />
+          <Agent p_x="18.83" p_y="-7.92" />
+          <Agent p_x="18.83" p_y="-8.92" />
+          <Agent p_x="18.83" p_y="-9.92" />
+          <Agent p_x="17.83" p_y="-10.92" />
+          <Agent p_x="16.83" p_y="-10.92" />
+          <Agent p_x="15.83" p_y="-10.92" />
+          <Agent p_x="14.83" p_y="-10.92" />
+          <Agent p_x="13.83" p_y="-10.92" />
       </Generator>
     </AgentGroup>
 
@@ -40,16 +59,16 @@
         <Common class="1" max_accel="5" max_angle_vel="360" max_neighbors="10" max_speed="2" neighbor_dist="5" obstacleSet="1" pref_speed="1.04" r="0.25" />
         <PedVO buffer="0.9" factor="1.57" tau="3" tauObst="0.1" turningBias="1.0" />
         <ORCA tau="3.0" tauObst="0.15" />
-    </AgentProfile>
+      </AgentProfile>
   
-    <AgentGroup>
-      <ProfileSelector name="injuredwalking" type="const" />
-      <StateSelector name="injuredwalking" type="const" />
-      <Generator type="explicit">
-          <Agent p_x="18.62631349348759" p_y="-6.92421179667802" />
-          <Agent p_x="10.64" p_y="-3.85" />
-      </Generator>
-    </AgentGroup>
+      <AgentGroup>
+        <ProfileSelector name="injuredwalking" type="const" />
+        <StateSelector name="injuredwalking" type="const" />
+        <Generator type="explicit">
+            <Agent p_x="14.83" p_y="-3.85" />
+            <Agent p_x="10.64" p_y="-3.85" />
+        </Generator>
+      </AgentGroup>
 
 
 </Experiment>

@@ -26,9 +26,9 @@
           <typename>injuredwalking</typename>
           <filename>/usr/share/gazebo-9/media/models/moonwalk.dae</filename>
           <rotate>0 0 0</rotate>
-          <animation>walk</animation>
-          <animation_speed>0.2</animation_speed>
-          <model_file_path>https://fuel.ignitionrobotics.org/1.0/Mingfei/models/actor</model_file_path>
+          <animation>walking</animation>
+          <animation_speed>1</animation_speed>
+          <model_file_path>https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Male%20visitor</model_file_path>
         </model_type>
         <model_type>
           <typename>running</typename>
@@ -57,7 +57,7 @@
           <property key="showTitleBar" type="bool">false</property>
           <property key="state" type="string">docked</property>
         </ignition-gui>
-        <engine>ogre</engine>
+        <engine>ogre2</engine>
         <scene>scene</scene>
         <ambient_light>1 1 1</ambient_light>
         <background_color>0.8 0.8 0.8</background_color>

@@ -226,9 +226,9 @@ bool CrowdSimulatorPlugin::_LoadModelRotation(const sdf::ElementPtr& modelTypeEl
         double roll = ignition::math::parseFloat(parts[1]);
         double yaw = ignition::math::parseFloat(parts[2]);
         
-        result.Pitch(pitch);
-        result.Roll(roll);
-        result.Yaw(yaw);
+        result.Pitch() = pitch;
+        result.Roll() = roll;
+        result.Yaw() = yaw;
 
     }
     return true;

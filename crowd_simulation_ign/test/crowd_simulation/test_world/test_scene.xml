@@ -39,11 +39,19 @@
       <Generator type="explicit">
           <Agent p_x="11.37" p_y="-7.80" />
           <Agent p_x="18.83" p_y="-3.85" />
-          <!-- <Agent p_x="6.7" p_y="-10.8" /> -->
-          <!-- <Agent p_x="9.07" p_y="-5.48" /> -->
-          <!-- <Agent p_x="15.06" p_y="-6.96" /> -->
-          <!-- <Agent p_x="18.79" p_y="-6.92" /> -->
-          <!-- <Agent p_x="18.83" p_y="-10.92" /> -->
+          <Agent p_x="6.7" p_y="-10.8" />
+          <Agent p_x="9.07" p_y="-5.48" />
+          <Agent p_x="15.06" p_y="-6.96" />
+          <Agent p_x="18.79" p_y="-6.92" />
+          <Agent p_x="18.83" p_y="-7.1" />
+          <Agent p_x="18.83" p_y="-7.92" />
+          <Agent p_x="18.83" p_y="-8.92" />
+          <Agent p_x="18.83" p_y="-9.92" />
+          <Agent p_x="17.83" p_y="-10.92" />
+          <Agent p_x="16.83" p_y="-10.92" />
+          <Agent p_x="15.83" p_y="-10.92" />
+          <Agent p_x="14.83" p_y="-10.92" />
+          <Agent p_x="13.83" p_y="-10.92" />
       </Generator>
     </AgentGroup>
 
@@ -57,8 +65,8 @@
         <ProfileSelector name="injuredwalking" type="const" />
         <StateSelector name="injuredwalking" type="const" />
         <Generator type="explicit">
-            <!-- <Agent p_x="14.83" p_y="-3.85" /> -->
-            <!-- <Agent p_x="10.64" p_y="-3.85" /> -->
+            <Agent p_x="14.83" p_y="-3.85" />
+            <Agent p_x="10.64" p_y="-3.85" />
         </Generator>
       </AgentGroup>
 

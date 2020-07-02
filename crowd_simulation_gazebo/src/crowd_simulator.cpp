@@ -374,7 +374,7 @@ bool CrowdSimulatorPlugin::_LoadCrowdSim()
       //TODO: specify different modelType
       // (size_t) agentPtr->_class identifies the profile type defined in scene.xml
       // this is corresponds to the modelType id
-      auto typePtr = this->_modelTypeDBPtr->Get(objectPtr->agentPtr->_typeName);
+      auto typePtr = this->_modelTypeDBPtr->Get(objectPtr->typeName);
       assert(typePtr);
       if (!this->_CreateModel(objectPtr->modelName, typePtr,
         objectPtr->agentPtr) )
@@ -413,9 +413,9 @@ bool CrowdSimulatorPlugin::_LoadModelRotation(
     double roll = ignition::math::parseFloat(parts[1]);
     double yaw = ignition::math::parseFloat(parts[2]);
 
-    result.Pitch(pitch);
-    result.Roll(roll);
-    result.Yaw(yaw);
+    result.Pitch() = pitch;
+    result.Roll() = roll;
+    result.Yaw() = yaw;
   }
   return true;
 }

@@ -28,17 +28,17 @@
     
     <GoalSet id = "0">
         <Goal capacity="2" id="0" type="point" weight="1.1" x="11.37" y="-7.07" />
-        <Goal capacity="1" id="1" type="point" weight="1" x="18.83" y="-6.92" />
+        <Goal capacity="2" id="1" type="point" weight="1" x="18.83" y="-6.92" />
         <Goal capacity="2" id="2" type="point" weight="1.1" x="15.06" y="-6.96" />
-        <Goal capacity="1" id="3" type="point" weight="1" x="11.2" y="-3.6" />
-        <Goal capacity="1" id="4" type="point" weight="1" x="16.06" y="-11.02" />
+        <Goal capacity="2" id="3" type="point" weight="1" x="11.2" y="-3.6" />
+        <Goal capacity="2" id="4" type="point" weight="1" x="16.06" y="-11.02" />
         <Goal capacity="2" id="5" type="point" weight="1.1" x="11.37" y="-7.07" />
-        <Goal capacity="1" id="6" type="point" weight="1" x="11.47" y="-11.07" />
-        <Goal capacity="1" id="7" type="point" weight="1" x="14.87" y="-11.02" />
+        <Goal capacity="2" id="6" type="point" weight="1" x="11.47" y="-11.07" />
+        <Goal capacity="2" id="7" type="point" weight="1" x="14.87" y="-11.02" />
         <Goal capacity="2" id="8" type="point" weight="1.2" x="10.02" y="-3.85" />
-        <Goal capacity="1" id="9" type="point" weight="1" x="9.06" y="-5.48" />
-        <Goal capacity="1" id="10" type="point" weight="1" x="7.4" y="-10.6" />
-        <Goal capacity="1" id="11" type="point" weight="1" x="18.83" y="-10.92" />
+        <Goal capacity="2" id="9" type="point" weight="1" x="9.06" y="-5.48" />
+        <Goal capacity="2" id="10" type="point" weight="1" x="7.4" y="-10.6" />
+        <Goal capacity="2" id="11" type="point" weight="1" x="18.83" y="-10.92" />
         <Goal capacity="2" id="12" type="point" weight="1.1" x="18.83" y="-3.85" />
     </GoalSet>
 
