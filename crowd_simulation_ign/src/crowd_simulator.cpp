@@ -487,7 +487,7 @@ void CrowdSimulatorPlugin::_UpdateObject(double deltaTime, double deltaSimTime, 
             exit(EXIT_FAILURE);
         }
         auto animTime = animTimeComp->Data() + 
-            std::chrono::duration_cast<std::chrono::steady_clock::duration>( std::chrono::duration<double>(distance_traveled / animation_speed));
+            std::chrono::duration_cast<std::chrono::steady_clock::duration>( std::chrono::duration<double>(distance_traveled / animation_speed * this->_simTimeStep * 100));
 
         *animTimeComp = ignition::gazebo::components::AnimationTime(animTime);
         ecm.SetChanged(entity, 
