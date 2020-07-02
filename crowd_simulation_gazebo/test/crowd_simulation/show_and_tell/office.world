@@ -655,31 +655,30 @@
     </include>
 
     <plugin filename="libcrowd_simulator.so" name="crowd_simulator">
-      <!-- <resource_path>/headless/dev_ws/src/traffic_editor/building_sim_plugins/building_sim_gazebo/test/crowd_simulation/show_and_tell_present</resource_path> -->
       <behavior_file>office_behavior.xml</behavior_file>
       <scene_file>office_scene.xml</scene_file>
       <model_type>
         <typename>human</typename>
         <filename>walk.dae</filename>
-        <rotate>0 0 0</rotate>
+        <initial_pose>0 0 0 0 0 0</initial_pose>
         <animation>walk</animation>
-		    <animation_speed>0.2</animation_speed>
+		    <animation_speed>10</animation_speed>
       </model_type>
       <model_type>
         <typename>injuredwalking</typename>
         <filename>moonwalk.dae</filename>
-        <rotate>0 0 0</rotate>
+        <initial_pose>0 0 0 0 0 0</initial_pose>
         <animation>walk</animation>
-		    <animation_speed>0.2</animation_speed>
+		    <animation_speed>10</animation_speed>
       </model_type>
       <model_type>
         <typename>running</typename>
         <filename>run.dae</filename>
-        <rotate>0 0 0</rotate>
+        <initial_pose>0 0 0 0 0 0</initial_pose>
         <animation>walk</animation>
-	      <animation_speed>0.2</animation_speed>
+	      <animation_speed>10</animation_speed>
       </model_type>
-      <update_time_step>0.001</update_time_step>
+      <update_time_step>0.01</update_time_step>
       <external_agent>WhiteCabinet_60</external_agent>
       <external_agent>Drawer_55</external_agent>
       <external_agent>SquareShelf_61</external_agent>

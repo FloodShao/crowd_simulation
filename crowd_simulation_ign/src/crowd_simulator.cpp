@@ -179,15 +179,15 @@ bool CrowdSimulatorPlugin::_LoadParams(const std::shared_ptr<const sdf::Element>
         }
         
         // important for ign plugin
-        if (!modelTypeElement->HasElement("rotate")) {
+        if (!modelTypeElement->HasElement("initial_pose")) {
             ignerr <<
-                "No model initial pose configured in <model_type>! <rotate> Required"
+                "No model initial pose configured in <model_type>! <initial_pose> Required"
                     << std::endl;
             return false;
         }
-        if (!this->_LoadModelRotation(modelTypeElement, modelTypePtr->pose)) {
+        if (!this->_LoadModelInitPose(modelTypeElement, modelTypePtr->pose)) {
             ignerr <<
-                "Error loading model initial pose in <model_type>! Check <pose>" <<
+                "Error loading model initial pose in <model_type>! Check <initial_pose>" <<
                 std::endl;
             return false;
         }
@@ -206,26 +206,32 @@ bool CrowdSimulatorPlugin::_LoadParams(const std::shared_ptr<const sdf::Element>
     return true;
 }
 
-bool CrowdSimulatorPlugin::_LoadModelRotation(const sdf::ElementPtr& modelTypeElement, crowd_simulator::AgentPose3d& result) const {
+bool CrowdSimulatorPlugin::_LoadModelInitPose(const sdf::ElementPtr& modelTypeElement, crowd_simulator::AgentPose3d& result) const {
 
-    std::string rotateStr;
-    if (modelTypeElement->Get<std::string>("rotate", rotateStr, ""))
+    std::string poseStr;
+    if (modelTypeElement->Get<std::string>("initial_pose", poseStr, ""))
     {
         std::regex ws_re("\\s+"); //whitespace
         std::vector<std::string> parts(
-        std::sregex_token_iterator(rotateStr.begin(), rotateStr.end(), ws_re, -1),
+        std::sregex_token_iterator(poseStr.begin(), poseStr.end(), ws_re, -1),
         std::sregex_token_iterator());
-        // boost::split(parts, rotateStr, boost::is_any_of(" "));
-        if (parts.size() != 3)
+        
+        if (parts.size() != 6)
         {
         ignerr <<
-            "Error loading <rotate> in <model_type>, 3 floats (pitch, roll, yaw) expected.";
+            "Error loading <initial_pose> in <model_type>, 6 floats (x, y, z, pitch, roll, yaw) expected.";
         return false;
         }
-        double pitch = ignition::math::parseFloat(parts[0]);
-        double roll = ignition::math::parseFloat(parts[1]);
-        double yaw = ignition::math::parseFloat(parts[2]);
+        double x = ignition::math::parseFloat(parts[0]);
+        double y = ignition::math::parseFloat(parts[1]);
+        double z = ignition::math::parseFloat(parts[2]);
+        double pitch = ignition::math::parseFloat(parts[3]);
+        double roll = ignition::math::parseFloat(parts[4]);
+        double yaw = ignition::math::parseFloat(parts[5]);
         
+        result.X() = x;
+        result.Y() = y;
+        result.Z() = z;
         result.Pitch() = pitch;
         result.Roll() = roll;
         result.Yaw() = yaw;
@@ -378,7 +384,8 @@ bool CrowdSimulatorPlugin::_CheckSpawnedAgents(ignition::gazebo::EntityComponent
                     if(nullptr == poseComp){
                         ecm.CreateComponent(entity, ignition::gazebo::components::Pose(ignition::math::Pose3d(0, 0, 1.0, 0, 0, 0)));
                     } else{
-                        *poseComp = ignition::gazebo::components::Pose(ignition::math::Pose3d(0, 0, 1.0, 0, 0, 0));
+                        //original pose in the world
+                        *poseComp = ignition::gazebo::components::Pose(ignition::math::Pose3d(0, 0, 0, 0, 0, 0));
                     }
 
                     // initialize agent animationName
@@ -454,10 +461,11 @@ void CrowdSimulatorPlugin::_UpdateObject(double deltaTime, double deltaSimTime, 
 
 
         double animation_speed = this->_modelTypeDBPtr->Get(object_ptr->typeName)->animationSpeed;
+        auto initial_pose = Convert(this->_modelTypeDBPtr->Get(object_ptr->typeName)->pose);
 
         crowd_simulator::AgentPose3d agent_pose;
         this->_crowdSimInterface->GetAgentPose(agent_ptr, deltaSimTime, agent_pose);
-        ignition::math::Pose3d update_pose = Convert(agent_pose);
+        ignition::math::Pose3d update_pose = Convert(agent_pose) + initial_pose;
 
         auto trajPoseComp = ecm.Component<ignition::gazebo::components::TrajectoryPose>(entity);
         if(nullptr == trajPoseComp){

@@ -17,7 +17,7 @@
         <model_type>
           <typename>human</typename>
           <filename>/usr/share/gazebo-9/media/models/walk.dae</filename>
-          <rotate>0 0 0</rotate>
+          <initial_pose>0 0 1 0 0 0</initial_pose>
           <animation>walk</animation>
           <animation_speed>0.15</animation_speed>
           <model_file_path>https://fuel.ignitionrobotics.org/1.0/Mingfei/models/actor</model_file_path>
@@ -25,15 +25,15 @@
         <model_type>
           <typename>injuredwalking</typename>
           <filename>/usr/share/gazebo-9/media/models/moonwalk.dae</filename>
-          <rotate>0 0 0</rotate>
+          <initial_pose>0 0 0 0 0 0</initial_pose>
           <animation>walking</animation>
-          <animation_speed>0.15</animation_speed>
+          <animation_speed>0.7</animation_speed>
           <model_file_path>https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Male%20visitor</model_file_path>
         </model_type>
         <model_type>
           <typename>running</typename>
           <filename>/usr/share/gazebo-9/media/models/run.dae</filename>
-          <rotate>0 0 0</rotate>
+          <initial_pose>0 0 1 0 0 0</initial_pose>
           <animation>walk</animation>
           <animation_speed>0.15</animation_speed>
           <model_file_path>https://fuel.ignitionrobotics.org/1.0/Mingfei/models/actor</model_file_path>

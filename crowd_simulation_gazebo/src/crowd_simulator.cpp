@@ -303,18 +303,16 @@ bool CrowdSimulatorPlugin::_LoadParams(const sdf::ElementPtr& sdf)
       return false;
     }
 
-    if (!modelTypeElement->HasElement("rotate"))
+    if (!modelTypeElement->HasElement("initial_pose"))
     {
       gzerr <<
-        "No model initial pose configured in <model_type>! <rotate> Required"
-            << std::endl;
+        "No model initial pose configured in <model_type>! <initial_pose> Required [" << s << "]" << std::endl;
       return false;
     }
-    if (!this->_LoadModelRotation(modelTypeElement, modelTypePtr->pose))
+    if (!this->_LoadModelInitPose(modelTypeElement, modelTypePtr->pose))
     {
       gzerr <<
-        "Error loading model initial pose in <model_type>! Check <pose>" <<
-        std::endl;
+        "Error loading model initial pose in <model_type>! Check <initial_pose> in [" << s << "]" << std::endl;
       return false;
     }
 
@@ -391,28 +389,35 @@ bool CrowdSimulatorPlugin::_LoadCrowdSim()
 
 
 //============================================
-bool CrowdSimulatorPlugin::_LoadModelRotation(
+bool CrowdSimulatorPlugin::_LoadModelInitPose(
   const sdf::ElementPtr& modelTypeElement,
   crowd_simulator::AgentPose3d& result) const
 {
-  std::string rotateStr;
-  if (modelTypeElement->Get<std::string>("rotate", rotateStr, ""))
+  std::string poseStr;
+  if (modelTypeElement->Get<std::string>("initial_pose", poseStr, ""))
   {
     std::regex ws_re("\\s+"); //whitespace
     std::vector<std::string> parts(
-      std::sregex_token_iterator(rotateStr.begin(), rotateStr.end(), ws_re, -1),
+      std::sregex_token_iterator(poseStr.begin(), poseStr.end(), ws_re, -1),
       std::sregex_token_iterator());
     // boost::split(parts, rotateStr, boost::is_any_of(" "));
-    if (parts.size() != 3)
+    if (parts.size() != 6)
     {
       gzerr <<
-        "Error loading <rotate> in <model_type>, 3 floats (pitch, roll, yaw) expected.";
+        "Error loading <initial_pose> in <model_type>, 6 floats (x, y, z, pitch, roll, yaw) expected.";
       return false;
     }
-    double pitch = ignition::math::parseFloat(parts[0]);
-    double roll = ignition::math::parseFloat(parts[1]);
-    double yaw = ignition::math::parseFloat(parts[2]);
 
+    double x = ignition::math::parseFloat(parts[0]);
+    double y = ignition::math::parseFloat(parts[1]);
+    double z = ignition::math::parseFloat(parts[2]);
+    double pitch = ignition::math::parseFloat(parts[3]);
+    double roll = ignition::math::parseFloat(parts[4]);
+    double yaw = ignition::math::parseFloat(parts[5]);
+
+    result.X() = x;
+    result.Y() = y;
+    result.Z() = z;
     result.Pitch() = pitch;
     result.Roll() = roll;
     result.Yaw() = yaw;

@@ -58,7 +58,7 @@ private:
 
     bool _LoadParams(const std::shared_ptr<const sdf::Element>& sdf);
 
-    bool _LoadModelRotation(const sdf::ElementPtr& modelTypeElement, crowd_simulator::AgentPose3d& result) const;
+    bool _LoadModelInitPose(const sdf::ElementPtr& modelTypeElement, crowd_simulator::AgentPose3d& result) const;
     
     bool _LoadCrowdSim();
     
