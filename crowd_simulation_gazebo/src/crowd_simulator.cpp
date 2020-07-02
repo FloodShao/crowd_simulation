@@ -56,8 +56,8 @@ void CrowdSimulatorPlugin::_Update(const gazebo::common::UpdateInfo& updateInfo)
   // if initialized, do updates
   if (this->_initialized)
   {
-    auto deltaTime = (updateInfo.simTime - this->_lastSimTime).Double();
-    this->_lastSimTime = updateInfo.simTime;
+    auto deltaTime = (updateInfo.simTime - this->_lastAnimTime).Double();
+    this->_lastAnimTime = updateInfo.simTime;
 
     auto deltaSimTime = (updateInfo.simTime - this->_lastSimTime).Double();
     if (deltaSimTime < this->_animTimeStep)
@@ -66,11 +66,10 @@ void CrowdSimulatorPlugin::_Update(const gazebo::common::UpdateInfo& updateInfo)
     }
     else
     {
-      this->_lastAnimTime = updateInfo.simTime;
+      this->_lastSimTime = updateInfo.simTime;
+      this->_crowdSimInterface->OneStepSim();
+      this->_updateTaskManager.RunAllTasks(deltaTime, deltaSimTime);
     }
-
-    this->_updateTaskManager.RunAllTasks(deltaTime, deltaSimTime);
-    this->_crowdSimInterface->OneStepSim();
 
     return;
   }
@@ -172,7 +171,8 @@ void CrowdSimulatorPlugin::_UpdateObject(double deltaTime, double deltaSimTime,
   gazebo::physics::ActorPtr actorPtr =
     boost::dynamic_pointer_cast<gazebo::physics::Actor>(modelPtr);
 
-  double deltaDist = static_cast<double>(agentPtr->_vel.Length()) * deltaTime;
+  double deltaDist = (actorPtr->WorldPose().Pos() - pose.Pos()).Length();
+
   actorPtr->SetScriptTime(
     actorPtr->ScriptTime() + deltaDist / typePtr->animationSpeed);
 
