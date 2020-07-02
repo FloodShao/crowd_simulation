@@ -19,7 +19,7 @@
           <filename>/usr/share/gazebo-9/media/models/walk.dae</filename>
           <rotate>0 0 0</rotate>
           <animation>walk</animation>
-          <animation_speed>0.2</animation_speed>
+          <animation_speed>0.15</animation_speed>
           <model_file_path>https://fuel.ignitionrobotics.org/1.0/Mingfei/models/actor</model_file_path>
         </model_type>
         <model_type>
@@ -27,7 +27,7 @@
           <filename>/usr/share/gazebo-9/media/models/moonwalk.dae</filename>
           <rotate>0 0 0</rotate>
           <animation>walking</animation>
-          <animation_speed>1</animation_speed>
+          <animation_speed>0.15</animation_speed>
           <model_file_path>https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Male%20visitor</model_file_path>
         </model_type>
         <model_type>
@@ -35,10 +35,10 @@
           <filename>/usr/share/gazebo-9/media/models/run.dae</filename>
           <rotate>0 0 0</rotate>
           <animation>walk</animation>
-          <animation_speed>0.2</animation_speed>
+          <animation_speed>0.15</animation_speed>
           <model_file_path>https://fuel.ignitionrobotics.org/1.0/Mingfei/models/actor</model_file_path>
         </model_type>
-        <update_time_step>0.1</update_time_step>
+        <update_time_step>0.01</update_time_step>
         <external_agent>WhiteCabinet</external_agent>
         <external_agent>Drawer_2</external_agent>
         <external_agent>SquareShelf</external_agent>

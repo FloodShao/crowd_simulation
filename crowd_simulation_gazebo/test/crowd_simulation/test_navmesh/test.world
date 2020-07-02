@@ -662,23 +662,23 @@
         <filename>walk.dae</filename>
         <rotate>0 0 0</rotate>
         <animation>walk</animation>
-		    <animation_speed>0.2</animation_speed>
+		    <animation_speed>10</animation_speed>
       </model_type>
       <model_type>
         <typename>injuredwalking</typename>
         <filename>moonwalk.dae</filename>
         <rotate>0 0 0</rotate>
         <animation>walk</animation>
-		    <animation_speed>0.2</animation_speed>
+		    <animation_speed>10</animation_speed>
       </model_type>
       <model_type>
         <typename>running</typename>
         <filename>run.dae</filename>
         <rotate>0 0 0</rotate>
         <animation>walk</animation>
-	      <animation_speed>0.2</animation_speed>
+	      <animation_speed>10</animation_speed>
       </model_type>
-      <update_time_step>0.1</update_time_step>
+      <update_time_step>0.01</update_time_step>
       <external_agent>WhiteCabinet_60</external_agent>
       <external_agent>Drawer_55</external_agent>
       <external_agent>SquareShelf_61</external_agent>
