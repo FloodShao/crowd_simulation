@@ -660,21 +660,21 @@
       <model_type>
         <typename>human</typename>
         <filename>walk.dae</filename>
-        <rotate>0 0 0</rotate>
+        <initial_pose>0 0 0 0 0 0</initial_pose>
         <animation>walk</animation>
 		    <animation_speed>10</animation_speed>
       </model_type>
       <model_type>
         <typename>injuredwalking</typename>
         <filename>moonwalk.dae</filename>
-        <rotate>0 0 0</rotate>
+        <initial_pose>0 0 0 0 0 0</initial_pose>
         <animation>walk</animation>
 		    <animation_speed>10</animation_speed>
       </model_type>
       <model_type>
         <typename>running</typename>
         <filename>run.dae</filename>
-        <rotate>0 0 0</rotate>
+        <initial_pose>0 0 0 0 0 0</initial_pose>
         <animation>walk</animation>
 	      <animation_speed>10</animation_speed>
       </model_type>

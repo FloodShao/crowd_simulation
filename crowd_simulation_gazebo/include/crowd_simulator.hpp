@@ -128,7 +128,7 @@ private:
 
   bool _LoadParams(const sdf::ElementPtr& sdf);
   bool _LoadCrowdSim();
-  bool _LoadModelRotation(const sdf::ElementPtr& modelTypeElement,
+  bool _LoadModelInitPose(const sdf::ElementPtr& modelTypeElement,
     crowd_simulator::AgentPose3d& result) const;
   bool _CreateModel(const std::string& modelName,
     const crowd_simulator::ModelTypeDatabase::Record* modelTypePtr,
