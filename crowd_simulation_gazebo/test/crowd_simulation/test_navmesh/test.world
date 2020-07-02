@@ -678,7 +678,7 @@
         <animation>walk</animation>
 	      <animation_speed>0.2</animation_speed>
       </model_type>
-      <update_time_step>0.001</update_time_step>
+      <update_time_step>0.1</update_time_step>
       <external_agent>WhiteCabinet_60</external_agent>
       <external_agent>Drawer_55</external_agent>
       <external_agent>SquareShelf_61</external_agent>
