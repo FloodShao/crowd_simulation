@@ -87,11 +87,9 @@ void CrowdSimulatorPlugin::PreUpdate(const ignition::gazebo::UpdateInfo& info, i
         deltaSimTime = 0.0;
     } else{
         this->_lastSimTime = info.simTime;
-        this->_UpdateObject(deltaTime, deltaSimTime, ecm);
         this->_crowdSimInterface->OneStepSim();
     }
-    
-
+    this->_UpdateObject(deltaTime, deltaSimTime, ecm);
 }
 
 
@@ -445,6 +443,8 @@ void CrowdSimulatorPlugin::_UpdateObject(double deltaTime, double deltaSimTime, 
 
         this->_crowdSimInterface->UpdateExternalAgent(objectPtr->agentPtr, Convert(poseComp->Data()) );
     }
+
+    if(deltaSimTime - 0.0 < 1e-6) return;
 
     // update the internal agent world pose and the animation
     for(auto internal_agent_entity : this->_entityDic){

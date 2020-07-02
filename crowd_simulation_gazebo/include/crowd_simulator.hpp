@@ -105,7 +105,7 @@ private:
   std::string _resourcePath;
   std::string _behaviorFile;
   std::string _sceneFile;
-  float _animTimeStep; //must be initialized from world file
+  float _simTimeStep; //must be initialized from world file
   std::vector<std::string> _externalAgents; //loaded from world file, store unique model name
 
 
