@@ -13,6 +13,60 @@
 
 namespace crowd_simulation_ign {
 
+//=================================================================================
+template<typename... Args>
+using Task = std::function<bool(Args... args)>;
+
+template<typename TaskType>
+class TaskManager
+{
+public:
+  using TaskPtr = std::shared_ptr<TaskType>;
+
+  void AddTask(const TaskType& task);
+
+  template<typename... TaskArgs>
+  void RunAllTasks(TaskArgs... args);
+
+  size_t GetTasksCount();
+
+private:
+  std::list<TaskPtr> _tasks;
+};
+
+template<typename TaskType>
+void TaskManager<TaskType>::AddTask(const TaskType& task)
+{
+  this->_tasks.emplace_back(std::make_shared<TaskType>(task));
+}
+
+template<typename TaskType>
+template<typename... TaskArgs>
+void TaskManager<TaskType>::RunAllTasks(TaskArgs... args)
+{
+  std::list<TaskPtr> done;
+  for (const auto& task : this->_tasks)
+  {
+    if ((*task)(args...))
+    {
+      done.emplace_back(task);
+    }
+  }
+
+  for (const auto& task : done)
+  {
+    this->_tasks.remove(task);
+  }
+}
+
+template<typename TaskType>
+size_t TaskManager<TaskType>::GetTasksCount()
+{
+  return this->_tasks.size();
+}
+
+//============================================================
+
 class IGNITION_GAZEBO_VISIBLE CrowdSimulatorPlugin 
     : public ignition::gazebo::System, 
     public ignition::gazebo::ISystemConfigure, 
@@ -53,6 +107,9 @@ private:
     std::shared_ptr<rclcpp::Node> _nodePtr;
     std::shared_ptr<ignition::transport::Node> _transportNodePtr;
 
+    using UpdateObjectTask = Task<double, double>;
+    TaskManager<UpdateObjectTask> _updateTaskManager;
+
     volatile bool _pluginInitialized = false; // disable compiler optimization
     volatile bool _agentInitialized = false;
 
@@ -71,8 +128,9 @@ private:
     
     bool _CheckSpawnedAgents(ignition::gazebo::EntityComponentManager& ecm);
 
-    void _UpdateObject(double deltaTime, double deltaAnimTime, ignition::gazebo::EntityComponentManager& ecm);
+    void _UpdateObject(double deltaTime, double deltaSimTime, ignition::gazebo::EntityComponentManager& ecm);
 
+    void _UpdateObject(double deltaTime, double deltaSimTime, ignition::gazebo::EntityComponentManager& ecm, ignition::gazebo::Entity entity, crowd_simulator::CrowdSimInterface::ObjectPtr object_ptr);
 };
 
 //================================================================================
