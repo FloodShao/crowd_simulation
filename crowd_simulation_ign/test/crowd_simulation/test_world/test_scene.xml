@@ -52,10 +52,18 @@
           <Agent p_x="15.83" p_y="-10.92" />
           <Agent p_x="14.83" p_y="-10.92" />
           <Agent p_x="13.83" p_y="-10.92" />
+          <Agent p_x="17.13" p_y="-10.92" />
+          <Agent p_x="16.13" p_y="-10.92" />
+          <Agent p_x="15.13" p_y="-10.92" />
+          <Agent p_x="14.13" p_y="-10.92" />
+          <Agent p_x="13.13" p_y="-10.92" />
           <Agent p_x="17.83" p_y="-3.85" />
           <Agent p_x="16.83" p_y="-3.85" />
           <Agent p_x="15.83" p_y="-3.85" />
           <Agent p_x="14.83" p_y="-3.85" />
+          <Agent p_x="17.13" p_y="-3.85" />
+          <Agent p_x="16.13" p_y="-3.85" />
+          <Agent p_x="15.13" p_y="-3.85" />
       </Generator>
     </AgentGroup>
 

@@ -75,4 +75,9 @@ install(
   DESTINATION share/${PROJECT_NAME}/
 )
 
+install(
+  DIRECTORY ${CMAKE_SOURCE_DIR}/menge_resource
+  DESTINATION share/${PROJECT_NAME}/
+)
+
 ament_package()

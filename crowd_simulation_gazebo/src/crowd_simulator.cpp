@@ -60,7 +60,7 @@ void CrowdSimulatorPlugin::_Update(const gazebo::common::UpdateInfo& updateInfo)
     this->_lastAnimTime = updateInfo.simTime;
 
     auto deltaSimTime = (updateInfo.simTime - this->_lastSimTime).Double();
-    if (deltaSimTime < this->_animTimeStep)
+    if (deltaSimTime < this->_simTimeStep)
     {
       deltaSimTime = 0.0;
     }
@@ -68,8 +68,8 @@ void CrowdSimulatorPlugin::_Update(const gazebo::common::UpdateInfo& updateInfo)
     {
       this->_lastSimTime = updateInfo.simTime;
       this->_crowdSimInterface->OneStepSim();
-      this->_updateTaskManager.RunAllTasks(deltaTime, deltaSimTime);
     }
+    this->_updateTaskManager.RunAllTasks(deltaTime, deltaSimTime);
 
     return;
   }
@@ -163,6 +163,9 @@ void CrowdSimulatorPlugin::_UpdateObject(double deltaTime, double deltaSimTime,
     return;
   }
 
+  // only update the external agents
+  if(deltaSimTime - 0.0 < 1e-6) return;
+
   //update pose from menge to gazebo
   crowd_simulator::AgentPose3d agent_pose;
   this->_crowdSimInterface->GetAgentPose(agentPtr, deltaSimTime, agent_pose);
@@ -173,8 +176,9 @@ void CrowdSimulatorPlugin::_UpdateObject(double deltaTime, double deltaSimTime,
 
   double deltaDist = (actorPtr->WorldPose().Pos() - pose.Pos()).Length();
 
+  // _simTimeStep is small, then deltaDist is small, the scriptTime is small than expected.
   actorPtr->SetScriptTime(
-    actorPtr->ScriptTime() + deltaDist / typePtr->animationSpeed);
+    actorPtr->ScriptTime() + deltaDist / typePtr->animationSpeed * this->_simTimeStep * 100);
 
   //add on original loaded pose
   auto animation = actorPtr->SkeletonAnimations().at(typePtr->animation);
@@ -253,7 +257,7 @@ bool CrowdSimulatorPlugin::_LoadParams(const sdf::ElementPtr& sdf)
       std::endl;
     return false;
   }
-  this->_animTimeStep = sdf->GetElement("update_time_step")->Get<float>();
+  this->_simTimeStep = sdf->GetElement("update_time_step")->Get<float>();
 
   if (!sdf->HasElement("model_type"))
   {
@@ -351,7 +355,7 @@ bool CrowdSimulatorPlugin::_LoadCrowdSim()
     _resourcePath,
     _behaviorFile,
     _sceneFile,
-    _animTimeStep);
+    _simTimeStep);
 
   assert(_crowdSimInterface);
 

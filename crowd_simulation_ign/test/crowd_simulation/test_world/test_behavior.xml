@@ -4,7 +4,7 @@
         <VelComponent file_name="office_navmesh.nav" heading_threshold="15" type="nav_mesh" />
     </State>
     <Transition from="walk" to="walk">
-        <Condition distance="0.05" type="goal_reached" />
+        <Condition distance="0.2" type="goal_reached" />
     </Transition>
 
 
@@ -13,7 +13,7 @@
         <VelComponent file_name="office_navmesh.nav" heading_threshold="15" type="nav_mesh" />
     </State>
     <Transition from="injuredwalking" to="injuredwalking">
-        <Condition distance="0.05" type="goal_reached" />
+        <Condition distance="0.2" type="goal_reached" />
     </Transition>
 
     <State final="0" name="static">
@@ -21,7 +21,7 @@
         <VelComponent type="zero" />
     </State>
     <Transition from="static" to="static">
-        <Condition distance="0.05" type="goal_reached" />
+        <Condition distance="0" type="goal_reached" />
     </Transition>>
 
     <State final="1" name="idle" />

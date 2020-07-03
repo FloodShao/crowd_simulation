@@ -87,11 +87,9 @@ void CrowdSimulatorPlugin::PreUpdate(const ignition::gazebo::UpdateInfo& info, i
         deltaSimTime = 0.0;
     } else{
         this->_lastSimTime = info.simTime;
-        this->_UpdateObject(deltaTime, deltaSimTime, ecm);
         this->_crowdSimInterface->OneStepSim();
     }
-    
-
+    this->_UpdateObject(deltaTime, deltaSimTime, ecm);
 }
 
 
@@ -446,6 +444,8 @@ void CrowdSimulatorPlugin::_UpdateObject(double deltaTime, double deltaSimTime, 
         this->_crowdSimInterface->UpdateExternalAgent(objectPtr->agentPtr, Convert(poseComp->Data()) );
     }
 
+    if(deltaSimTime - 0.0 < 1e-6) return;
+
     // update the internal agent world pose and the animation
     for(auto internal_agent_entity : this->_entityDic){
         auto agent_name = internal_agent_entity.first;
@@ -487,7 +487,7 @@ void CrowdSimulatorPlugin::_UpdateObject(double deltaTime, double deltaSimTime, 
             exit(EXIT_FAILURE);
         }
         auto animTime = animTimeComp->Data() + 
-            std::chrono::duration_cast<std::chrono::steady_clock::duration>( std::chrono::duration<double>(distance_traveled / animation_speed));
+            std::chrono::duration_cast<std::chrono::steady_clock::duration>( std::chrono::duration<double>(distance_traveled / animation_speed * this->_simTimeStep * 100));
 
         *animTimeComp = ignition::gazebo::components::AnimationTime(animTime);
         ecm.SetChanged(entity, 

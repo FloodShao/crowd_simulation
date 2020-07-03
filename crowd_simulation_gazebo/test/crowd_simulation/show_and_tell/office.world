@@ -683,5 +683,38 @@
       <external_agent>Drawer_55</external_agent>
       <external_agent>SquareShelf_61</external_agent>
     </plugin>
+
+    <!-- <plugin filename="libcrowd_simulator.so" name="crowd_simulator">
+      <behavior_file>office_behavior.xml</behavior_file>
+      <scene_file>office_scene.xml</scene_file>
+      <model_type>
+        <typename>human</typename>
+        <filename>walk.dae</filename>
+        <initial_pose>0 0 0 0 0 0</initial_pose>
+        <animation>walk</animation>
+		    <animation_speed>20</animation_speed>
+      </model_type>
+      <model_type>
+        <typename>injuredwalking</typename>
+        <filename>moonwalk.dae</filename>
+        <initial_pose>0 0 0 0 0 0</initial_pose>
+        <animation>walk</animation>
+		    <animation_speed>20</animation_speed>
+      </model_type>
+      <model_type>
+        <typename>running</typename>
+        <filename>run.dae</filename>
+        <initial_pose>0 0 0 0 0 0</initial_pose>
+        <animation>walk</animation>
+	      <animation_speed>10</animation_speed>
+      </model_type>
+      <update_time_step>0.005</update_time_step>
+      <external_agent>WhiteCabinet</external_agent>
+      <external_agent>Drawer_2</external_agent>
+      <external_agent>SquareShelf</external_agent>
+      <external_agent>magni1</external_agent>
+      <external_agent>magni2</external_agent>
+    </plugin> -->
+
   </world>
 </sdf>
