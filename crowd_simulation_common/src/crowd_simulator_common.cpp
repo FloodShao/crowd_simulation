@@ -77,6 +77,8 @@ bool MengeHandle::_LoadSimulation()
     return true;
   }
 
+  std::cout << "Error in provided navmesh. Menge simulator initialized false." << std::endl;
+
   return false;
 }
 

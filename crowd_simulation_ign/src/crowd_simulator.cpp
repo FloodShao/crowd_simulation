@@ -107,7 +107,6 @@ bool CrowdSimulatorPlugin::_LoadParams(const std::shared_ptr<const sdf::Element>
         this->_resourcePath = sdf->Get<std::string>("resource_path");
     }
     
-
     if(!sdf->HasElement("behavior_file")){
         ignerr << "No <behavior_file> provided!" << std::endl;
         return false;

@@ -1,0 +1,68 @@
+<BFSM>
+    <State final="0" name="walk">
+        <GoalSelector goal_set="0" dist="u" type="weighted" />
+        <VelComponent file_name="L1_navmesh.nav" heading_threshold="15" type="nav_mesh" />
+    </State>
+    <Transition from="walk" to="walk">
+        <Condition distance="0.2" type="goal_reached" />
+    </Transition>
+
+
+    <State final="0" name="injuredwalking">
+        <GoalSelector goal_set="1" dist="u" type="weighted" />
+        <VelComponent file_name="L1_navmesh.nav" heading_threshold="15" type="nav_mesh" />
+    </State>
+    <Transition from="injuredwalking" to="injuredwalking">
+        <Condition distance="0.2" type="goal_reached" />
+    </Transition>
+
+    <State final="0" name="static">
+        <GoalSelector type="offset" dist="u" min_x="0.0" max_x="0.0" min_y="0.0" max_y="0.0"/> 
+        <VelComponent type="zero" />
+    </State>
+    <Transition from="static" to="static">
+        <Condition distance="0" type="goal_reached" />
+    </Transition>>
+
+    <State final="1" name="idle" />
+    
+    <GoalSet id = "0">
+        <Goal capacity="2" id="0" type="point" weight="1" x="6.984522071583099" y="-2.2024734165404323" />
+        <Goal capacity="2" id="1" type="point" weight="1" x="9.035878361636506" y="-2.736796041232235" />
+        <Goal capacity="2" id="2" type="point" weight="1" x="9.90585730102153" y="-4.030131572977924" />
+        <Goal capacity="2" id="3" type="point" weight="1" x="13.105367374642984" y="-3.672656016344464" />
+        <Goal capacity="2" id="4" type="point" weight="1" x="15.93254397443582" y="-3.7328228238892835" />
+        <Goal capacity="2" id="5" type="point" weight="1" x="18.69126575431707" y="-3.8662145047437293" />
+        <Goal capacity="2" id="6" type="point" weight="1" x="18.74111954732034" y="-5.612046531368814" />
+        <Goal capacity="2" id="7" type="point" weight="1" x="18.758390960169866" y="-6.7443734630297785" />
+        <Goal capacity="2" id="8" type="point" weight="1" x="18.77711060458222" y="-8.924513978937487" />
+        <Goal capacity="2" id="9" type="point" weight="1" x="18.647811895257732" y="-10.386558701602326" />
+        <Goal capacity="2" id="10" type="point" weight="1" x="17.476067666069227" y="-10.995905773890385" />
+        <Goal capacity="2" id="11" type="point" weight="1" x="15.168985579687552" y="-11.102950057685021" />
+        <Goal capacity="2" id="12" type="point" weight="1" x="13.388045135220558" y="-11.122817650196641" />
+        <Goal capacity="2" id="13" type="point" weight="1" x="11.671118678067975" y="-10.987087875724688" />
+        <Goal capacity="2" id="14" type="point" weight="1" x="10.397793834514875" y="-11.437634833825935" />
+        <Goal capacity="2" id="15" type="point" weight="1" x="7.577666636965093" y="-10.598818576584318" />
+        <Goal capacity="2" id="16" type="point" weight="1" x="7.991674763289428" y="-8.943628056188665" />
+        <Goal capacity="2" id="17" type="point" weight="1" x="7.63019952876194" y="-8.144252786981163" />
+        <Goal capacity="2" id="18" type="point" weight="1" x="8.210844324934673" y="-6.820556449742088" />
+        <Goal capacity="2" id="19" type="point" weight="1" x="8.598325178722037" y="-6.035853698377348" />
+        <Goal capacity="2" id="20" type="point" weight="1" x="16.93383971614867" y="-6.770364048036346" />
+        <Goal capacity="2" id="21" type="point" weight="1" x="15.150515916146574" y="-6.843465320754451" />
+        <Goal capacity="2" id="22" type="point" weight="1" x="10.105588500872017" y="-6.604097652518782" />
+        <Goal capacity="2" id="23" type="point" weight="1" x="11.568138445847831" y="-6.93529001411103" />
+        <Goal capacity="2" id="24" type="point" weight="1" x="19.90003768467876" y="-3.334106026352792" />
+        <Goal capacity="1" id="25" type="point" weight="1" x="16.9" y="-5.32" />
+        <Goal capacity="2" id="26" type="point" weight="1" x="23.07288675514414" y="-3.258501393392783" />
+        <Goal capacity="2" id="27" type="point" weight="1" x="22.599004195720322" y="-5.509898587756236" />
+        <Goal capacity="2" id="28" type="point" weight="1" x="19.690102780795858" y="-5.659517605225626" />
+    </GoalSet>
+
+    <GoalSet id = "1">
+        <Goal capacity="2" id="0" type="point" weight="1" x="18.83" y="-3.7" />
+        <Goal capacity="2" id="1" type="point" weight="1" x="10.02" y="-3.8" />
+        <Goal capacity="2" id="2" type="point" weight="1" x="6.92" y="-2.03" />
+    </GoalSet>
+
+
+</BFSM>
