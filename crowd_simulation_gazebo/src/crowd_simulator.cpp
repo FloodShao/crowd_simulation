@@ -174,7 +174,13 @@ void CrowdSimulatorPlugin::_UpdateObject(double deltaTime, double deltaSimTime,
   gazebo::physics::ActorPtr actorPtr =
     boost::dynamic_pointer_cast<gazebo::physics::Actor>(modelPtr);
 
-  double deltaDist = (actorPtr->WorldPose().Pos() - pose.Pos()).Length();
+  auto delta_dist_vector = pose.Pos() - actorPtr->WorldPose().Pos() ;
+  delta_dist_vector.Z(0.0);
+  double deltaDist = delta_dist_vector.Length();
+  //debug
+  // if(modelPtr->GetName() == "agent9"){
+  //   std::cout << "deltaDist" << deltaDist << std::endl;
+  // }
 
   // _simTimeStep is small, then deltaDist is small, the scriptTime is small than expected.
   actorPtr->SetScriptTime(

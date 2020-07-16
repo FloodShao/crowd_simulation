@@ -1,38 +1,63 @@
 <BFSM>
     <State final="0" name="walk">
         <GoalSelector goal_set="0" dist="u" type="weighted" />
-        <VelComponent file_name="L1_navmesh.nav" heading_threshold="15" type="nav_mesh" />
+        <VelComponent file_name="L1_navmesh.nav" heading_threshold="7" type="nav_mesh" />
     </State>
-    <Transition from="walk" to="walk">
-        <Condition distance="0.2" type="goal_reached" />
-    </Transition>
 
-
-    <State final="0" name="injuredwalking">
+    <State final="0" name="storewalking">
         <GoalSelector goal_set="1" dist="u" type="weighted" />
-        <VelComponent file_name="L1_navmesh.nav" heading_threshold="15" type="nav_mesh" />
+        <VelComponent file_name="L1_navmesh.nav" heading_threshold="7" type="nav_mesh" />
     </State>
-    <Transition from="injuredwalking" to="injuredwalking">
+
+    <State final="0" name="corriwalking">
+        <GoalSelector goal_set="2" dist="u" type="weighted" />
+        <VelComponent file_name="L1_navmesh.nav" heading_threshold="7" type="nav_mesh" />
+    </State>
+
+    <!-- <Transition from="walk" to="walk">
+        <Condition distance="0.2" type="goal_reached" />
+    </Transition>
+    <Transition from="walk" to="injuredwalking">
+        <Condition type="and">
+            <Condition distance="0.2" type="goal_reached" />
+            <Condition per_agent="true" dist="c" value="6.0" type="timer" />
+        </Condition>
+    </Transition> -->
+
+    <Transition from="walk">
+        <Condition type="or">
+            <Condition distance="0.2" type="goal_reached" />
+            <Condition per_agent="true" dist="c" value="100.0" type="timer" />
+        </Condition>
+        <Target type="prob">
+            <State weight="0.5" name="corriwalking"/>
+            <State weight="0.4" name="storewalking"/>
+            <State weight="1.0" name="walk"/>
+        </Target>
+    </Transition>
+
+    <!-- <Transition from="injuredwalking" to="injuredwalking">
+        <Condition distance="0.2" type="goal_reached" />
+    </Transition> -->
+    <Transition from="storewalking" to="corriwalking">
+        <Condition type="and">
+            <Condition distance="0.2" type="goal_reached" />
+            <Condition per_agent="true" dist="c" value="20.0" type="timer" />
+        </Condition>
+    </Transition>
+
+    <Transition from="corriwalking" to="walk">
         <Condition distance="0.2" type="goal_reached" />
     </Transition>
 
-    <State final="0" name="static">
-        <GoalSelector type="offset" dist="u" min_x="0.0" max_x="0.0" min_y="0.0" max_y="0.0"/> 
-        <VelComponent type="zero" />
-    </State>
-    <Transition from="static" to="static">
-        <Condition distance="0" type="goal_reached" />
-    </Transition>>
-
-    <State final="1" name="idle" />
+    <State final="1" name="static" />
     
     <GoalSet id = "0">
-        <Goal capacity="2" id="0" type="point" weight="1" x="6.984522071583099" y="-2.2024734165404323" />
         <Goal capacity="2" id="1" type="point" weight="1" x="9.035878361636506" y="-2.736796041232235" />
         <Goal capacity="2" id="2" type="point" weight="1" x="9.90585730102153" y="-4.030131572977924" />
-        <Goal capacity="2" id="3" type="point" weight="1" x="13.105367374642984" y="-3.672656016344464" />
-        <Goal capacity="2" id="4" type="point" weight="1" x="15.93254397443582" y="-3.7328228238892835" />
-        <Goal capacity="2" id="5" type="point" weight="1" x="18.69126575431707" y="-3.8662145047437293" />
+        <!-- <Goal capacity="2" id="3" type="point" weight="1" x="13.105367374642984" y="-3.672656016344464" /> -->
+        <!-- <Goal capacity="2" id="4" type="point" weight="1" x="15.93254397443582" y="-3.7328228238892835" /> -->
+        <!-- <Goal capacity="2" id="5" type="point" weight="1" x="18.69126575431707" y="-3.8662145047437293" /> -->
         <Goal capacity="2" id="6" type="point" weight="1" x="18.74111954732034" y="-5.612046531368814" />
         <Goal capacity="2" id="7" type="point" weight="1" x="18.758390960169866" y="-6.7443734630297785" />
         <Goal capacity="2" id="8" type="point" weight="1" x="18.77711060458222" y="-8.924513978937487" />
@@ -59,9 +84,12 @@
     </GoalSet>
 
     <GoalSet id = "1">
+        <Goal capacity="2" id="0" type="point" weight="1" x="6.92" y="-2.03" />
+    </GoalSet>
+
+    <GoalSet id = "2">
         <Goal capacity="2" id="0" type="point" weight="1" x="18.83" y="-3.7" />
         <Goal capacity="2" id="1" type="point" weight="1" x="10.02" y="-3.8" />
-        <Goal capacity="2" id="2" type="point" weight="1" x="6.92" y="-2.03" />
     </GoalSet>
 
 
