@@ -154,13 +154,6 @@ bool CrowdSimulatorPlugin::_LoadParams(const std::shared_ptr<const sdf::Element>
         auto modelTypePtr = this->_modelTypeDBPtr->Emplace(s, new crowd_simulator::ModelTypeDatabase::Record()); //unordered_map
         modelTypePtr->typeName = s;
 
-        if (!modelTypeElement->Get<std::string>("filename", modelTypePtr->fileName, "")){
-            ignerr <<
-                "No actor skin configured in <model_type>! <filename> Required" <<
-                std::endl;
-            return false;
-        }
-
         if (!modelTypeElement->Get<std::string>("animation", modelTypePtr->animation, "")){
             ignerr <<
                 "No animation configured in <model_type>! <animation> Required" <<
