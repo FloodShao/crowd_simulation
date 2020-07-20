@@ -177,14 +177,10 @@ void CrowdSimulatorPlugin::_UpdateObject(double deltaTime, double deltaSimTime,
   auto delta_dist_vector = pose.Pos() - actorPtr->WorldPose().Pos() ;
   delta_dist_vector.Z(0.0);
   double deltaDist = delta_dist_vector.Length();
-  //debug
-  // if(modelPtr->GetName() == "agent9"){
-  //   std::cout << "deltaDist" << deltaDist << std::endl;
-  // }
 
   // _simTimeStep is small, then deltaDist is small, the scriptTime is small than expected.
   actorPtr->SetScriptTime(
-    actorPtr->ScriptTime() + deltaDist / typePtr->animationSpeed * this->_simTimeStep * 100);
+    actorPtr->ScriptTime() + deltaDist / typePtr->animationSpeed );
 
   //add on original loaded pose
   auto animation = actorPtr->SkeletonAnimations().at(typePtr->animation);

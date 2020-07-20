@@ -16,10 +16,10 @@
         <scene_file>test_scene.xml</scene_file>
         <model_type>
           <typename>human</typename>
-          <filename>/usr/share/gazebo-9/media/models/walk.dae</filename>
+          <filename>walk.dae</filename>
           <initial_pose>0 0 1 0 0 0</initial_pose>
           <animation>walk</animation>
-          <animation_speed>0.15</animation_speed>
+          <animation_speed>0.2</animation_speed>
           <model_file_path>https://fuel.ignitionrobotics.org/1.0/Mingfei/models/actor</model_file_path>
         </model_type>
         <model_type>
