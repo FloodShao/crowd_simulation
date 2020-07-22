@@ -17,7 +17,6 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(rmf_demo_maps REQUIRED)
 
 install(
   DIRECTORY config_resource/
@@ -26,65 +25,12 @@ install(
 
 ament_package()
 
-include(GNUInstallDirs)
+
+set(config_resource_dir ${CMAKE_SOURCE_DIR}/config_resource)
 
 file(GLOB_RECURSE menge_setup_files "config_resource/*.menge_setup.yaml")
 file(GLOB_RECURSE traffic_editor_files "config_resource/*.menge_navmesh.building.yaml")
-file(GLOB_RECURSE map_files "maps/*.building.yaml")
 
-
-# from rmf_demo_maps
-foreach(path ${map_files})
-
-  # Get the output world name
-  string(REPLACE "." ";" list1 ${path})
-  list(GET list1 0 name)
-  string(REPLACE "/" ";" list2 ${name})
-  list(GET list2 -1 world_name)
-
-  set(map_path ${path})
-  set(output_world_name ${world_name})
-  set(output_dir ${CMAKE_CURRENT_BINARY_DIR}/maps/${output_world_name})
-  set(output_world_path ${output_dir}/${output_world_name}.world)
-  set(output_model_dir ${output_dir}/models)
-
-  # first, generate the world
-  set(no_download_flag "")
-  if (NO_DOWNLOAD_MODELS)
-    set(no_download_flag "--no_download")
-  endif()
-  add_custom_command(
-    OUTPUT ${output_world_path}
-    COMMAND ros2 run building_map_tools building_map_generator gazebo ${map_path} ${output_world_path} ${output_model_dir} ${no_download_flag}
-    DEPENDS ${map_path}
-  )
-
-  add_custom_target(generate_${output_world_name} ALL
-    DEPENDS ${output_world_path}
-  )
-
-  # now, generate the nav graphs
-  set(output_nav_graphs_dir ${output_dir}/nav_graphs/)
-  set(output_nav_graphs_phony ${output_nav_graphs_dir}/phony)
-  add_custom_command(
-    OUTPUT ${output_nav_graphs_phony}
-    COMMAND ros2 run building_map_tools building_map_generator nav ${map_path} ${output_nav_graphs_dir}
-    DEPENDS ${map_path}
-  )
-
-  add_custom_target(generate_${output_world_name}_nav_graphs ALL
-    DEPENDS ${output_nav_graphs_phony}
-  )
-
-  install(
-    DIRECTORY ${output_dir}
-    DESTINATION share/${PROJECT_NAME}/maps
-  )
-
-endforeach()
-
-
-# generate navmesh
 foreach(traffic_editor_file ${traffic_editor_files})
 
   # get the world name
@@ -93,26 +39,18 @@ foreach(traffic_editor_file ${traffic_editor_files})
   string(REPLACE "/" ";" list2 ${name})
   list(GET list2 -1 world_name)
 
-  set(menge_navmesh_path ${traffic_editor_file})
   set(output_world_name ${world_name})
-  set(output_dir ${CMAKE_CURRENT_BINARY_DIR}/config_resource/${output_world_name})
-  set(temp_target ${world_name}_navmesh)
-  
+  set(output_dir ${CMAKE_CURRENT_BINARY_DIR}/${project_name}/config_resource/${output_world_name})
+
   add_custom_command(
-    OUTPUT ${temp_target}
+    OUTPUT ${output_world_name}
     COMMAND ros2 run building_navmesh_tools navmesh_generator ${traffic_editor_file} ${output_dir} ${output_world_name}
     DEPENDS ${traffic_editor_file}
   )
-  
-  add_custom_target(
-    generate_${temp_target} ALL
-    DEPENDS ${temp_target}
-  )
 
-  file(GLOB_RECURSE navmesh_files ${output_dir}/*.nav)
-  install(
-    FILES ${navmesh_files}
-    DESTINATION share/${PROJECT_NAME}/config_resource
+  add_custom_target(
+    generate_${output_world_name}_navmesh ALL
+    DEPENDS ${output_world_name}
   )
 
 endforeach()
@@ -128,17 +66,39 @@ foreach(menge_setup_file ${menge_setup_files})
 
   set(menge_config_file ${menge_setup_file})
   set(output_world_name ${world_name})
-  set(output_dir ${CMAKE_CURRENT_BINARY_DIR}/config_resource/${output_world_name})
-
-  set(original_world_file ${CMAKE_CURRENT_BINARY_DIR}/maps/${output_world_name}/${output_world_name}.world)
-  set(output_dir_world ${CMAKE_CURRENT_BINARY_DIR}/maps/${output_world_name})
-
+  set(output_menge_dir ${CMAKE_CURRENT_BINARY_DIR}/${project_name}/config_resource/${output_world_name})
   set(temp_target ${world_name}_config)
 
+ 
+  set(map_path ${config_resource_dir}/${output_world_name}/${output_world_name}.map.building.yaml)
+  set(output_maps_dir ${CMAKE_CURRENT_BINARY_DIR}/maps/${output_world_name})
+  set(output_world_path ${output_maps_dir}/${output_world_name}.world)
+  set(output_model_dir ${output_maps_dir}/models)
+  
+  # todo, add check map_path exists
+
+  # generate world file
+  set(no_download_flag "")
+  if (NO_DOWNLOAD_MODELS)
+    set(no_download_flag "--no_download")
+  endif()
+
+  add_custom_command(
+    OUTPUT ${output_world_path}_world
+    COMMAND ros2 run building_map_tools building_map_generator gazebo ${map_path} ${output_world_path} ${output_model_dir} ${no_download_flag}
+    DEPENDS ${map_path}
+  )
+
+  add_custom_target(
+    generate_${output_world_name}_world ALL
+    DEPENDS ${output_world_path}_world
+  )
+
+  # generate config file, and insert the plugin part into the world file
   add_custom_command(
     OUTPUT ${temp_target}
-    COMMAND ros2 run building_navmesh_tools configfile_generator ${menge_config_file} ${output_dir} gazebo ${original_world_file}
-    DEPENDS ${menge_config_file}
+    COMMAND ros2 run building_navmesh_tools configfile_generator ${menge_config_file} ${output_dir} gazebo ${output_world_path}
+    DEPENDS ${output_world_path}_world
   )
 
   add_custom_target(
@@ -146,15 +106,20 @@ foreach(menge_setup_file ${menge_setup_files})
     DEPENDS ${temp_target}
   )
 
-  file(GLOB_RECURSE config_files ${output_dir}/*.xml)
+  file(GLOB_RECURSE config_files 
+    ${output_menge_dir}/*.xml
+    ${output_menge_dir}/*.nav
+  )
+
   install(
     FILES ${config_files}
-    DESTINATION share/${PROJECT_NAME}/config_resource
+    DESTINATION share/${PROJECT_NAME}/config_resource/${output_world_name}
+  )
+
+  install(
+    DIRECTORY ${output_maps_dir}
+    DESTINATION share/${PROJECT_NAME}/maps
   )
 
 endforeach()
-
-
-
-
 

@@ -34,15 +34,18 @@ L1:
   - [6.1092175236737605, -3.50961641511339, 0.0, store]
  state:
   - {name: 'static', goal_set: , navmesh_file_name: , final: 1}
-  - {name: 'common_walking', goal_set: 0, navmesh_file_name: 'office.L1.navmesh.nav', final: 0}
-  - {name: 'store_walking', goal_set: 1, navmesh_file_name: 'office.L1.navmesh.nav', final: 0}
-  - {name: 'conf_walking', goal_set: 2, navmesh_file_name: 'office.L1.navmesh.nav', final: 0}
+  - {name: 'common_walking', goal_set: '0', navmesh_file_name: 'office.L1.navmesh.nav', final: 0}
+  - {name: 'store_walking', goal_set: '1', navmesh_file_name: 'office.L1.navmesh.nav', final: 0}
+  - {name: 'conf_walking', goal_set: '2', navmesh_file_name: 'office.L1.navmesh.nav', final: 0}
  transition:
   - {from: 'common_walking', to: , 
-    Condition: {type: goal_reached, distance: 0.2}, 
+    Condition: {type: or,
+                condition1: {type: goal_reached, distance: 0.4},
+                condition2: {type: timer, dist: 'c', value: 30.0, per_agent: true}}, 
     Target: [
-      {name: 'store_walking', weight: 1.0}, 
-      {name: 'conf_walking', weight: 0.3}
+      {name: 'store_walking', weight: 0.3}, 
+      {name: 'conf_walking', weight: 0.7},
+      {name: 'common_walking', weight: 1.0},
     ]
     }
   - {from: 'store_walking', to: 'common_walking', 
@@ -51,7 +54,7 @@ L1:
     }
   - {from: 'conf_walking', to: , 
     Condition: {type: and, 
-                condition1: {type: goal_reached, distance: 0.2}, 
+                condition1: {type: goal_reached, distance: 0.4}, 
                 condition2: {type: timer, dist: 'c', value: 30.0, per_agent: true}}, 
     Target: [
      {name: 'store_walking', weight: 0.3}, 
@@ -59,9 +62,9 @@ L1:
     ]
     }
  goal_set:
-  - {set_id: 0, set_area: {common}, capacity: 2}
-  - {set_id: 1, set_area: {store}, capacity: 1}
-  - {set_id: 2, set_area: {conf1, conf2}, capacity: 1}
+  - {set_id: '0', set_area: {common}, capacity: 2}
+  - {set_id: '1', set_area: {store}, capacity: 2}
+  - {set_id: '2', set_area: {conf1, conf2}, capacity: 2}
  goal_area:
   - common
   - conf2
@@ -73,20 +76,20 @@ L1:
   - {name: 'external_agent', class: 1, max_accel: 0, max_angle_vel: 0, max_neighbors: 10, max_speed: 0, neighbor_dist: 5, obstacleSet: 1, pref_speed: 0, r: 0.25, ORCA_tau: 1.0, ORCA_tauObst: 0.4}
   - {name: 'human', class: 1, max_accel: 5, max_angle_vel: 180, max_neighbors: 10, max_speed: 3, neighbor_dist: 10, obstacleSet: 1, pref_speed: 1, r: 0.25, ORCA_tau: 1.0, ORCA_tauObst: 0.4}
  agent_group:
-  - {group_id: 0, profile_selector: external_agent, state_selector: static}
-  - {group_id: 1, profile_selector: human, state_selector: common_walking}
+  - {group_id: '0', profile_selector: external_agent, state_selector: static}
+  - {group_id: '1', profile_selector: human, state_selector: common_walking}
  agent_list:
-  - {group_id: 0, agents_number: , agents_name: ['magni2', 'magni1'], x: 0.0, y: 0.0}
-  - {group_id: 1, agents_number: 5, agents_name: , x: 18.71932562411382, y: -3.7547856132592172}
+  - {group_id: '0', agents_number: , agents_name: ['magni2', 'magni1'], x: 0.0, y: 0.0}
+  - {group_id: '1', agents_number: 5, agents_name: , x: 18.71932562411382, y: -3.7547856132592172}
 
 model_type:
-  - {type_name: 'human',
+  - {typename: 'human',
      animation_speed: 0.2,
      animation: 'walk',
      gazebo: {filename: walk.dae, initial_pose: [0, 0, 0, 0, 0, 0]},
      ign: {model_file_path: https://fuel.ignitionrobotics.org/1.0/Mingfei/models/actor, initial_pose: [0, 0, 0, 0, 0, 0]}
     }
-  - {type_name: 'running_human',
+  - {typename: 'running_human',
      animation_speed: 0.2,
      animation: 'walk',
      gazebo: {filename: walk.dae, initial_pose: [0, 0, 0, 0, 0, 0]},
