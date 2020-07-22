@@ -1,0 +1,98 @@
+
+L1:
+ goals:
+  - [2.784419793478699, -9.068542907528862, 0.0, conf2]
+  - [6.925883817832386, -2.058469742796842, 0.0, store]
+  - [9.066477326770338, -2.6844930915376977, 0.0, store]
+  - [9.975214343591647, -3.5730399029939375, 0.0, common]
+  - [13.105331087295925, -3.6740078608091125, 0.0, common]
+  - [15.932518561069944, -3.7345954078941466, 0.0, common]
+  - [18.71932562411382, -3.7547856132592172, 0.0, common]
+  - [18.7395242949738, -5.572268112396749, 0.0, common]
+  - [18.759714500338873, -6.743537057428356, 0.0, common]
+  - [18.779913171198857, -8.92451944259136, 0.0, common]
+  - [18.759714500338873, -10.459279808153525, 0.0, common]
+  - [17.48747759749209, -11.04491428066933, 0.0, common]
+  - [15.16513837828886, -11.105493362259452, 0.0, common]
+  - [13.388044755376379, -11.125692033119433, 0.0, common]
+  - [11.651340008688953, -11.105493362259452, 0.0, common]
+  - [10.399293311207241, -11.509382124509976, 0.0, common]
+  - [7.410550332533015, -10.681414394643857, 0.0, common]
+  - [8.117342968229064, -8.92451944259136, 0.0, common]
+  - [7.4913280849831185, -8.157130794315364, 0.0, common]
+  - [8.581810812069708, -6.036735956237396, 0.0, common]
+  - [7.633429882575601, -5.614003002312806, 0.0, conf2]
+  - [5.351479539597422, -4.503321604366234, 0.0, conf2]
+  - [5.290891992512388, -10.238482769859285, 0.0, conf2]
+  - [16.902588088528542, -5.210114240062283, 0.0, common]
+  - [15.165883341841115, -6.845851028934535, 0.0, common]
+  - [10.177903688269163, -6.886239905159588, 0.0, common]
+  - [11.571307219791102, -6.946818986749711, 0.0, common]
+  - [19.891339532697682, -3.2916637831095756, 0.0, conf1]
+  - [22.698336801106628, -5.6341932076778765, 0.0, conf1]
+  - [23.22339219203231, -3.1301082782093665, 0.0, conf1]
+  - [6.1092175236737605, -3.50961641511339, 0.0, store]
+ state:
+  - {name: 'static', goal_set: , navmesh_file_name: , final: 1}
+  - {name: 'common_walking', goal_set: '0', navmesh_file_name: 'office.L1.navmesh.nav', final: 0}
+  - {name: 'store_walking', goal_set: '1', navmesh_file_name: 'office.L1.navmesh.nav', final: 0}
+  - {name: 'conf_walking', goal_set: '2', navmesh_file_name: 'office.L1.navmesh.nav', final: 0}
+ transition:
+  - {from: 'common_walking', to: , 
+    Condition: {type: or,
+                condition1: {type: goal_reached, distance: 0.4},
+                condition2: {type: timer, dist: 'c', value: 30.0, per_agent: true}}, 
+    Target: [
+      {name: 'store_walking', weight: 0.3}, 
+      {name: 'conf_walking', weight: 0.7},
+      {name: 'common_walking', weight: 1.0},
+    ]
+    }
+  - {from: 'store_walking', to: 'common_walking', 
+    Condition: {type: timer, dist: 'c', value: 30.0, per_agent: true}, 
+    Target: 
+    }
+  - {from: 'conf_walking', to: , 
+    Condition: {type: and, 
+                condition1: {type: goal_reached, distance: 0.4}, 
+                condition2: {type: timer, dist: 'c', value: 30.0, per_agent: true}}, 
+    Target: [
+     {name: 'store_walking', weight: 0.3}, 
+     {name: 'common_walking', weight: 1.0}
+    ]
+    }
+ goal_set:
+  - {set_id: '0', set_area: {common}, capacity: 2}
+  - {set_id: '1', set_area: {store}, capacity: 2}
+  - {set_id: '2', set_area: {conf1, conf2}, capacity: 2}
+ goal_area:
+  - common
+  - conf2
+  - store
+  - conf1
+ obstacle_set:
+  - {class: 1, file_name: 'office.L1.navmesh.nav', type: nav_mesh}
+ agent_profile:
+  - {name: 'external_agent', class: 1, max_accel: 0, max_angle_vel: 0, max_neighbors: 10, max_speed: 0, neighbor_dist: 5, obstacleSet: 1, pref_speed: 0, r: 0.25, ORCA_tau: 1.0, ORCA_tauObst: 0.4}
+  - {name: 'human', class: 1, max_accel: 5, max_angle_vel: 180, max_neighbors: 10, max_speed: 3, neighbor_dist: 10, obstacleSet: 1, pref_speed: 1, r: 0.25, ORCA_tau: 1.0, ORCA_tauObst: 0.4}
+ agent_group:
+  - {group_id: '0', profile_selector: external_agent, state_selector: static}
+  - {group_id: '1', profile_selector: human, state_selector: common_walking}
+ agent_list:
+  - {group_id: '0', agents_number: , agents_name: ['magni2', 'magni1'], x: 0.0, y: 0.0}
+  - {group_id: '1', agents_number: 5, agents_name: , x: 18.71932562411382, y: -3.7547856132592172}
+
+model_type:
+  - {typename: 'human',
+     animation_speed: 0.2,
+     animation: 'walk',
+     gazebo: {filename: walk.dae, initial_pose: [0, 0, 0, 0, 0, 0]},
+     ign: {model_file_path: https://fuel.ignitionrobotics.org/1.0/Mingfei/models/actor, initial_pose: [0, 0, 0, 0, 0, 0]}
+    }
+  - {typename: 'running_human',
+     animation_speed: 0.2,
+     animation: 'walk',
+     gazebo: {filename: walk.dae, initial_pose: [0, 0, 0, 0, 0, 0]},
+     ign: {model_file_path: https://fuel.ignitionrobotics.org/1.0/Mingfei/models/actor, initial_pose: [0, 0, 0, 0, 0, 0]}
+    }
+update_time_step: 0.1

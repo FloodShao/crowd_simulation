@@ -154,13 +154,6 @@ bool CrowdSimulatorPlugin::_LoadParams(const std::shared_ptr<const sdf::Element>
         auto modelTypePtr = this->_modelTypeDBPtr->Emplace(s, new crowd_simulator::ModelTypeDatabase::Record()); //unordered_map
         modelTypePtr->typeName = s;
 
-        if (!modelTypeElement->Get<std::string>("filename", modelTypePtr->fileName, "")){
-            ignerr <<
-                "No actor skin configured in <model_type>! <filename> Required" <<
-                std::endl;
-            return false;
-        }
-
         if (!modelTypeElement->Get<std::string>("animation", modelTypePtr->animation, "")){
             ignerr <<
                 "No animation configured in <model_type>! <animation> Required" <<
@@ -472,8 +465,12 @@ void CrowdSimulatorPlugin::_UpdateObject(double deltaTime, double deltaSimTime, 
             exit(EXIT_FAILURE);
         }
         ignition::math::Pose3d current_pose = trajPoseComp->Data();
-        double distance_traveled = (update_pose.Pos() - current_pose.Pos()).Length();
-        // double distance_traveled = deltaTime * static_cast<double>(agent_ptr->_vel.Length());
+        
+        //eliminate z coordinate
+        auto distance_traveled_vector = update_pose.Pos() - current_pose.Pos();
+        distance_traveled_vector.Z(0.0);
+        double distance_traveled = distance_traveled_vector.Length();
+        // double distance_traveled = deltaSimTime * static_cast<double>(agent_ptr->_vel.Length());
 
         *trajPoseComp = ignition::gazebo::components::TrajectoryPose(update_pose);
         ecm.SetChanged(entity, 
@@ -486,7 +483,7 @@ void CrowdSimulatorPlugin::_UpdateObject(double deltaTime, double deltaSimTime, 
             exit(EXIT_FAILURE);
         }
         auto animTime = animTimeComp->Data() + 
-            std::chrono::duration_cast<std::chrono::steady_clock::duration>( std::chrono::duration<double>(distance_traveled / animation_speed * this->_simTimeStep * 100));
+            std::chrono::duration_cast<std::chrono::steady_clock::duration>( std::chrono::duration<double>(distance_traveled / animation_speed ));
 
         *animTimeComp = ignition::gazebo::components::AnimationTime(animTime);
         ecm.SetChanged(entity, 
