@@ -66,10 +66,9 @@ foreach(menge_setup_file ${menge_setup_files})
 
   set(menge_config_file ${menge_setup_file})
   set(output_world_name ${world_name})
-  set(output_menge_dir ${CMAKE_CURRENT_BINARY_DIR}/${project_name}/config_resource/${output_world_name})
+  set(output_menge_dir ${CMAKE_CURRENT_BINARY_DIR}/config_resource/${output_world_name})
   set(temp_target ${world_name}_config)
 
- 
   set(map_path ${config_resource_dir}/${output_world_name}/${output_world_name}.map.building.yaml)
   set(output_maps_dir ${CMAKE_CURRENT_BINARY_DIR}/maps/${output_world_name})
   set(output_world_path ${output_maps_dir}/${output_world_name}.world)
@@ -84,36 +83,20 @@ foreach(menge_setup_file ${menge_setup_files})
   endif()
 
   add_custom_command(
-    OUTPUT ${output_world_path}_world
+    OUTPUT  temp_target
     COMMAND ros2 run building_map_tools building_map_generator gazebo ${map_path} ${output_world_path} ${output_model_dir} ${no_download_flag}
+    COMMAND ros2 run building_navmesh_tools configfile_generator ${menge_config_file} ${output_dir} gazebo ${output_world_path}
     DEPENDS ${map_path}
   )
 
   add_custom_target(
-    generate_${output_world_name}_world ALL
-    DEPENDS ${output_world_path}_world
-  )
-
-  # generate config file, and insert the plugin part into the world file
-  add_custom_command(
-    OUTPUT ${temp_target}
-    COMMAND ros2 run building_navmesh_tools configfile_generator ${menge_config_file} ${output_dir} gazebo ${output_world_path}
-    DEPENDS ${output_world_path}_world
-  )
-
-  add_custom_target(
     generate_${output_world_name}_configfile ALL
-    DEPENDS ${temp_target}
-  )
-
-  file(GLOB_RECURSE config_files 
-    ${output_menge_dir}/*.xml
-    ${output_menge_dir}/*.nav
+    DEPENDS temp_target
   )
 
   install(
-    FILES ${config_files}
-    DESTINATION share/${PROJECT_NAME}/config_resource/${output_world_name}
+    DIRECTORY ${output_menge_dir}
+    DESTINATION share/${PROJECT_NAME}/config_resource
   )
 
   install(
@@ -122,4 +105,3 @@ foreach(menge_setup_file ${menge_setup_files})
   )
 
 endforeach()
-

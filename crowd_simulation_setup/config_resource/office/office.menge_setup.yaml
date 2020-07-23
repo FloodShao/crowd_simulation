@@ -53,8 +53,10 @@ L1:
     Target: 
     }
   - {from: 'conf_walking', to: , 
-    Condition: {type: and, 
-                condition1: {type: goal_reached, distance: 0.4}, 
+    Condition: {type: or, 
+                condition1: { type: and, 
+                              condition1: {type: goal_reached, distance: 0.4},
+                              condition2: {type: timer, dist: 'c', value: 30.0, per_agent: true}}, 
                 condition2: {type: timer, dist: 'c', value: 30.0, per_agent: true}}, 
     Target: [
      {name: 'store_walking', weight: 0.3}, 
@@ -63,8 +65,8 @@ L1:
     }
  goal_set:
   - {set_id: '0', set_area: {common}, capacity: 2}
-  - {set_id: '1', set_area: {store}, capacity: 2}
-  - {set_id: '2', set_area: {conf1, conf2}, capacity: 2}
+  - {set_id: '1', set_area: {store}, capacity: 3}
+  - {set_id: '2', set_area: {conf1, conf2}, capacity: 3}
  goal_area:
   - common
   - conf2
@@ -73,14 +75,14 @@ L1:
  obstacle_set:
   - {class: 1, file_name: 'office.L1.navmesh.nav', type: nav_mesh}
  agent_profile:
-  - {name: 'external_agent', class: 1, max_accel: 0, max_angle_vel: 0, max_neighbors: 10, max_speed: 0, neighbor_dist: 5, obstacleSet: 1, pref_speed: 0, r: 0.25, ORCA_tau: 1.0, ORCA_tauObst: 0.4}
-  - {name: 'human', class: 1, max_accel: 5, max_angle_vel: 180, max_neighbors: 10, max_speed: 3, neighbor_dist: 10, obstacleSet: 1, pref_speed: 1, r: 0.25, ORCA_tau: 1.0, ORCA_tauObst: 0.4}
+  - {name: 'external_agent', class: 1, max_accel: 0, max_angle_vel: 0, max_neighbors: 10, max_speed: 0, neighbor_dist: 10, obstacleSet: 1, pref_speed: 0, r: 0.25, ORCA_tau: 1.0, ORCA_tauObst: 0.4}
+  - {name: 'human', class: 1, max_accel: 5, max_angle_vel: 360, max_neighbors: 10, max_speed: 3, neighbor_dist: 10, obstacleSet: 1, pref_speed: 1, r: 0.25, ORCA_tau: 1.0, ORCA_tauObst: 0.4}
  agent_group:
   - {group_id: '0', profile_selector: external_agent, state_selector: static}
   - {group_id: '1', profile_selector: human, state_selector: common_walking}
  agent_list:
   - {group_id: '0', agents_number: , agents_name: ['magni2', 'magni1'], x: 0.0, y: 0.0}
-  - {group_id: '1', agents_number: 5, agents_name: , x: 18.71932562411382, y: -3.7547856132592172}
+  - {group_id: '1', agents_number: 10, agents_name: , x: 18.71932562411382, y: -3.7547856132592172}
 
 model_type:
   - {typename: 'human',

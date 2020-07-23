@@ -1,5 +1,5 @@
 building:
-  filename: office.crowd_simulation.building.yaml
+  filename: office.menge_navmesh.building.yaml
 name: office
 traffic_maps:
   {}
