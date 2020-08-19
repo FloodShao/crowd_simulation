@@ -4,7 +4,6 @@
 #include <cstdlib>
 
 #include <ignition/math/Pose3.hh>
-#include <boost/pointer_cast.hpp>
 
 #include "crowd_simulator.hpp"
 
@@ -406,7 +405,7 @@ bool CrowdSimulatorPlugin::_LoadModelInitPose(
     std::vector<std::string> parts(
       std::sregex_token_iterator(poseStr.begin(), poseStr.end(), ws_re, -1),
       std::sregex_token_iterator());
-    // boost::split(parts, rotateStr, boost::is_any_of(" "));
+
     if (parts.size() != 6)
     {
       gzerr <<
