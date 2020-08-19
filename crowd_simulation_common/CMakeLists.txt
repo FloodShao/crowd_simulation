@@ -26,13 +26,13 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(Eigen3 REQUIRED)
 # find_package(sdformat9 REQUIRED)
-find_package(gazebo REQUIRED)
+# find_package(gazebo REQUIRED)
 # find_package(gazebo_ros REQUIRED)
 # find_package(gazebo_dev REQUIRED)
 # find_package(gazebo_msgs REQUIRED)
 
 find_package(menge REQUIRED)
-find_package(ignition-math6 REQUIRED)
+# find_package(ignition-math6 REQUIRED)
 
 include(GNUInstallDirs)
 

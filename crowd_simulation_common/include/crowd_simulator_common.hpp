@@ -4,6 +4,7 @@
 #include <functional>
 #include <list>
 #include <queue>
+#include <memory>
 
 #include <MengeCore/Runtime/SimulatorDB.h>
 #include <MengeCore/Orca/ORCADBEntry.h>
@@ -12,7 +13,7 @@
 
 namespace crowd_simulator {
 
-using AgentPtr = std::shared_ptr<Menge::Agents::BaseAgent>; //using crowd_simulator::AgentPtr
+using AgentPtr = std::shared_ptr<Menge::Agents::BaseAgent>;
 //===============================================================
 /*
 * class AgentPose3d
@@ -121,16 +122,12 @@ class ModelTypeDatabase
 {
 public:
 
-  ModelTypeDatabase()
-  {
-    //do nothing
-  }
+  ModelTypeDatabase() {}
 
   struct Record
   {
     std::string typeName;
     std::string fileName;
-    // ignition::math::Pose3d pose = ignition::math::Pose3d::Zero;
     AgentPose3d pose;
     std::string animation;
     double animationSpeed;

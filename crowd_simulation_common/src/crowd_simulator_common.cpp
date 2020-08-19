@@ -1,5 +1,6 @@
 #include <fstream>
-#include <ignition/math.hh>
+#include <cmath>
+
 #include "crowd_simulator_common.hpp"
 
 namespace crowd_simulator {
@@ -123,9 +124,6 @@ bool CrowdSimInterface::SpawnObject(std::vector<std::string>& externalModels)
 
     std::string modelName = "agent" + std::to_string(i);
 
-    // TODO: agent pointer didn't specify agentProfile name, in gazebo world, requires a name to configure model sdf
-    // use size_t agentPtr->_class as the typename
-    // std::cout << agentPtr->_typeName << std::endl;
     this->AddObject(agentPtr, modelName, agentPtr->_typeName, false);
   }
 
@@ -210,19 +208,9 @@ void CrowdSimInterface::GetAgentPose(const AgentPtr agentPtr, double deltaSimTim
   double xRot = static_cast<double>(agentPtr->_orient.x());
   double yRot = static_cast<double>(agentPtr->_orient.y());
 
-  // not interface related, just to calculate the picth, roll, and yaw...
-  // actually there is only yaw. pitch = 0, roll = 0
-  // yaw is atan2(xRot/yRot)
-  ignition::math::Quaterniond Ori({
-      xRot, -yRot, 0,
-      yRot, xRot, 0,
-      0, 0, 1,
-    });
-  
-  modelPose.Pitch(Ori.Euler().X());
-  modelPose.Roll(Ori.Euler().Y());
-  modelPose.Yaw(Ori.Euler().Z());
-
+  modelPose.Pitch(0);
+  modelPose.Roll(0);
+  modelPose.Yaw(std::atan2(yRot, xRot));
 }
 
 //=============================================================
