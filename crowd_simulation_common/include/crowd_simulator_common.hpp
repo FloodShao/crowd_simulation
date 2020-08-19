@@ -101,13 +101,11 @@ private:
   std::string _resourcePath;
   std::string _behaviorFile;
   std::string _sceneFile;
-
-  size_t _agentCount;
   float _simTimeStep;
-
+  size_t _agentCount;
+  
   //Have some problem when transfer raw pointer to shared_ptr or unique_ptr
-  // std::shared_ptr<Menge::Agents::SimulatorInterface> _sim;
-  Menge::Agents::SimulatorInterface* _sim;
+  std::shared_ptr<Menge::Agents::SimulatorInterface> _sim;
 
   std::string _ResourceFilePath(const std::string& relativePath) const;
   bool _LoadSimulation(); //initialize simulatorinterface

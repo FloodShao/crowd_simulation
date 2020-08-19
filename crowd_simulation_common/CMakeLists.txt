@@ -39,24 +39,31 @@ include(GNUInstallDirs)
 ###############################
 # crowd simulator stuff
 ###############################
-add_library(crowd_simulator_common
-  SHARED
-  src/crowd_simulator_common.cpp  
-)
+if (menge_FOUND)
+  add_library(crowd_simulator_common
+    SHARED
+    src/crowd_simulator_common.cpp  
+  )
 
-target_include_directories(crowd_simulator_common
-  PUBLIC
-    ${GAZEBO_INCLUDE_DIRS}
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    ${menge_INCLUDE_DIRS}
-    ${IGNITION-MATH_INCLUDE_DIRS}
-)
+  target_include_directories(crowd_simulator_common
+    PUBLIC
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+      ${menge_INCLUDE_DIRS}
+  )
 
-target_link_libraries(crowd_simulator_common
-  PUBLIC
-    ${GAZEBO_LIBRARIES}
-    ${menge_LIBRARIES}
-)
+  target_link_libraries(crowd_simulator_common
+    PUBLIC
+      ${menge_LIBRARIES}
+  )
+
+  #crowd_simulation_common_install
+  ament_export_libraries(crowd_simulator_common)
+  install(
+    TARGETS crowd_simulator_common
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  )
+endif()
 
 ###############################
 # install stuff

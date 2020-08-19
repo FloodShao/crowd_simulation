@@ -58,21 +58,21 @@ bool MengeHandle::_LoadSimulation()
 
   std::cout << "Start CrowdSimulator initializing [Menge]..." << std::endl;
 
-  this->_sim = simDB.getDBEntry("orca")->getSimulator(
-    this->_agentCount,
-    this->_simTimeStep,
-    0,
-    std::numeric_limits<float>::infinity(),
-    this->_behaviorFile,
-    this->_sceneFile,
-    "",
-    "",
-    false
+  this->_sim = std::shared_ptr<Menge::Agents::SimulatorInterface> (
+    simDB.getDBEntry("orca")->getSimulator(
+      this->_agentCount,
+      this->_simTimeStep,
+      0,
+      std::numeric_limits<float>::infinity(),
+      this->_behaviorFile,
+      this->_sceneFile,
+      "",
+      "",
+      false)
   );
 
   if (this->_sim)
   {
-
     std::cout << std::endl << "Crowd Simulator initialized success [Menge]. " <<
       std::endl;
     return true;
