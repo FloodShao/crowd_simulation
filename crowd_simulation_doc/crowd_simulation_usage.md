@@ -42,11 +42,13 @@ The detailed introduction of navmesh (Menge is its own navmesh definition) can b
 For a generalization purpose, in crowd simulation, the navmesh is generated from the human lanes with predefined width. [to be updated]()
 
 In traffic-editor, the human lanes can be edited under the *Crowd_Sim* Edit mode by clicking the *add human lane* button. The "edge_type" (defined in traffic_editor gui) of human lanes is "human_lane" with default "graph_idx" of 9 (make sure you are in the right graph_idx when select the human lanes). Additional property of "width" is added in the edge params with default value of 1.0. You can easily change the width of the human lane, the width of the lane drawing will change accordingly. 
+
 ![traffic_editor_human_lane](https://github.com/FloodShao/crowd_simulation/blob/master/crowd_simulation_doc/figs/traffic_editor_human_lane.png?raw=true)
 
 **Note**:
 1. You should make each human lane connected to the whole graph. That means at least 2 human lanes should be defined, and no orphan human lane is expected.
 2. If you check the navmesh generation logic, the polygon vertices are generated based on the intersection lanes. So the following situation is not expected.
+
 ![unexpected_lane_crossing](https://github.com/FloodShao/crowd_simulation/blob/master/crowd_simulation_doc/figs/unexpected_lane_crossing.png?raw=true)
 
 #### Human Goals
@@ -54,11 +56,11 @@ In Menge, each heading goal should be within the navmesh graph. Menge implements
 
 In Menge, a goal set includes multiple goals, and a goal set is related with a state. In order to make it easy to configure the state, it is suggested to name the "human_goal_set_name" as location name. For example, there are multiple lane vertices in the conference room, if you want "reach the conference" to be a human state, it is suggested to name the "human_goal_set_name" for all lane vertices in the conference room as "conf", so that when the human is set to "reach the conference" state, the human will randomly select one of the target named with "conf" rather than reaching to a constant position everytime except that's what you want.
 
-![human_goals]()
+![human_goals](https://github.com/FloodShao/crowd_simulation/blob/master/crowd_simulation_doc/figs/human_goals.png?raw=true)
 
 ### FSM configuration (Global path plan)
 A *crowd_sim* panel is created in traffic-editor. You can define the configuration of the crowd simulation in this panel. Make sure you have updated all the human lanes and the "human_goal_set_name" for all the lane vertices first.
-![]()
+![crowd_sim_panel](https://github.com/FloodShao/crowd_simulation/blob/master/crowd_simulation_doc/figs/crowd_sim_panel.png?raw=true)
 
 #### enable_crowd_sim
 If you uncheck this, no "crowd_simulation" plugin will be inserted in the world.sdf. No crowd simulation will be performed under this situation.
@@ -88,4 +90,51 @@ Theoretically, a condition tree can be constructued with the three condition cal
 **Upon finish the above setup, a FSM required for the global path plan problem is constructed.** In menge, once the human transits to a certain state, and assigned with a target position, A* algorithm will be used to generate the velocity map to guide the human to reach the target position.
 
 ### Local collision avoidance
+Each human is modeled as a circle in Menge. The following setup is to set up the local behavior of the human.
+#### AgentProfiles
+One agent profile defines one type of human (with same circle radius, same collision avoidance setup, same walking speed, **using the same actor skeleton**).
+There is one default agent profile for external agent (for moving robots). All the speed are set to 0, because in Menge, external agents are not supposed to be moving, while external agent position is directly update from the simulation world. As such, the only parameter you might need to set for external agent is the radius "r" (according to different robot size)
 
+Other agent profile, you can specifying the walking speed, radius, and other parameters. For walking human, the following parameters are suggested:
+* max_accelration = 5
+* max_angle_velocity = 360
+* max_neighbors = 5 (the maximum number of collision avoid interaction agents)
+* max_speed = 2 (walking to front)
+* neighbor_dist = 5 (neighbors less than the dist is ready for ORCA interaction)
+* pref_speed = 1.5
+* r = 0.25
+* ORCA_tau = 1 (if collision with agents happens within the future 1s, motion planning triggers)
+* ORCA_tauObst = 0.4 (if collision with obstacle, usually walls, happens within the future 1s, motion planning triggers)
+Please leave the "class" and "obstacle_set" as default 1.
+
+Reduce the max_neighbors and neighbor_dist might benefit the simulation RTF, because the number of negotiation process in Menge will be reduced. The benefit is not guaranteed, because the RTF is affected by many factors.
+
+### Agent spawn related
+#### AgentGroup
+In our modification of Menge, there are 2 types of agents: external agents and internal agents.
+External agents are typically moving robots, while internal agents are the actual crowds. The crowd simulation plugin updates the position of 2 types of agents differently as follows: for external agents, plugin get the robot position from the simulation world and update in Menge, while for internal agents, plugin get the human position from the Menge simulation result to the gazebo simulation world.
+
+![plugin_structure]()
+
+1. External Agent
+**Traffic-editor** is assuming all the robots are spawned from the "spawn_robot_name" defined in the "building.yaml". Traffic-editor will traverse all the vertices that has "spawn_robot_name" property, and add the robot name to the external agent group. Please do not change anything in the external agent.
+
+2. Internal Agent, agents are spawned in groups.
+* Each group are spawned at the same position "x, y". The position (x, y) is suggested to configured at one of the human goals. Mind that you should get the transformed point vertices in the traffic-editor scene.
+* Each group spawns agents under same agent profile and starts the agents with the same State.
+* You will just need to specify the number of agents you want to spawn for this group.
+
+#### ModelType
+This is related to the actor skin and animation to be played in the gazebo and ign gazebo.
+* "name" should be consistent with the name of desired AgentProfile type.
+* "animation" should be specified as "walk" or "walking" that is attached in the "filename"
+* "animation_speed" is the value to adjust the play speed of the animation to be able to synchroinze the animation with walking distance.
+For gazebo: (Currently gazebo might have different actor spawn method compared to ign gazebo)
+* "gazebo_model" should be specified as the .dae file like "walk.dae" or "model://MaleVisitorPhone/meshes/MaleVisitorPhoneWalk.dae"
+* "gazebo_idle" is reserved for the future animation switch feature. It should be set as the .dae file like "stand.dar" or "model://MaleVisitorPhone/meshes/MaleVisitorPhoneIdle.dae"
+* "x, y, z, pitch, roll, yaw" is set as the initial coordinate system of the actor. You might need to adjust these if the actor is hanged in the air or facing the ground.
+For ign: (ign gazebo can easily spawn the actors using a service call)
+* "ign_model": can be either the html address in the ignition fuel, or local directory "model://MaleVisitorPhone". ign gazebo will load the model.sdf in the model directory.
+* "x, y, z, pitch, roll, yaw" is same as gazebo
+
+**Upon finish all these steps, save the building, all the setup will be saved to building.yaml. The next step is to transform the yaml setup to the .xml format and .nav format that required for Menge**
