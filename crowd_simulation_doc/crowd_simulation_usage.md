@@ -114,7 +114,7 @@ Reduce the max_neighbors and neighbor_dist might benefit the simulation RTF, bec
 In our modification of Menge, there are 2 types of agents: external agents and internal agents.
 External agents are typically moving robots, while internal agents are the actual crowds. The crowd simulation plugin updates the position of 2 types of agents differently as follows: for external agents, plugin get the robot position from the simulation world and update in Menge, while for internal agents, plugin get the human position from the Menge simulation result to the gazebo simulation world.
 
-![plugin_structure]()
+![plugin_structure](https://github.com/FloodShao/crowd_simulation/blob/master/crowd_simulation_doc/figs/plugin_structure.png?raw=true)
 
 1. External Agent
 **Traffic-editor** is assuming all the robots are spawned from the "spawn_robot_name" defined in the "building.yaml". Traffic-editor will traverse all the vertices that has "spawn_robot_name" property, and add the robot name to the external agent group. Please do not change anything in the external agent.
