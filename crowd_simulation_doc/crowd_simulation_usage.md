@@ -105,6 +105,7 @@ Other agent profile, you can specifying the walking speed, radius, and other par
 * r = 0.25
 * ORCA_tau = 1 (if collision with agents happens within the future 1s, motion planning triggers)
 * ORCA_tauObst = 0.4 (if collision with obstacle, usually walls, happens within the future 1s, motion planning triggers)
+
 Please leave the "class" and "obstacle_set" as default 1.
 
 Reduce the max_neighbors and neighbor_dist might benefit the simulation RTF, because the number of negotiation process in Menge will be reduced. The benefit is not guaranteed, because the RTF is affected by many factors.
