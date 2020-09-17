@@ -104,7 +104,7 @@ Other agent profile, you can specifying the walking speed, radius, and other par
 * pref_speed = 1.5
 * r = 0.25
 * ORCA_tau = 1 (if collision with agents happens within the future 1s, motion planning triggers)
-* ORCA_tauObst = 0.4 (if collision with obstacle, usually walls, happens within the future 1s, motion planning triggers)
+* ORCA_tauObst = 0.4 (if collision with obstacle, usually walls, happens within the future 0.4s, motion planning triggers)
 
 Please leave the "class" and "obstacle_set" as default 1.
 
